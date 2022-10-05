@@ -25,7 +25,7 @@ The following is the projected technologies that will be used in this project.
 ### Backend:
 
 - Server - Node.js with express (TypeScript)
-- Database - Supabase(Suggestions are welcome)
+- Database - MongoDB(Suggestions are welcome)
 - Hosting - Vercel for frontend, EC2 or lambda for backend(Suggestions are welcome)
 - API - GraphQL(likely, yet to confirm)
 
