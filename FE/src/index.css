@@ -1,0 +1,29 @@
+/* common styles */
+
+*{
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+:root{
+    --primary-color:rgb(84, 13, 110);
+    --hover-color: rgb(84, 13, 110);
+    --disabled-color:rgb(184, 54, 231);
+    --boxShadow: rgba(0,0,0,0.1);
+    --background-light: #fafafa;
+    --background-dark: #2f3640;
+    --background-dark-secondary: #4b4b4b;
+    --font-color-light: #2f3640;
+    --font-color-dark: #fafafa;
+}
+
+body{
+    background-color: lightgray;
+    margin:0;
+}
+
+body.dark{
+    background-color: var(--background-dark-secondary);
+}
