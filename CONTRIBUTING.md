@@ -18,7 +18,7 @@ Before you make your contribution, I'd quickly want you to run through some guid
 - Clone the repository on your local machine
 
 ```terminal
-git clone https://github.com/fineanmol/Hacktoberfest2022.git
+git clone https://github.com/<your-username>/bingenow
 ```
 
 - Navigate to the project directory.
