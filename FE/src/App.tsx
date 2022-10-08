@@ -1,11 +1,12 @@
-import React from "react"
-
+import React, { Fragment } from "react"
+import Landing from "./pages/Landing"
 const App: React.FC = () => {
 
     return (
-        <div>
-            Hello world!
-        </div>
+        <Fragment>
+
+            <Landing/>
+        </Fragment>
     )
 }
 
