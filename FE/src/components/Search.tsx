@@ -33,7 +33,7 @@ const Search = () => {
         if (debouncedValue && debouncedValue.length > 3) {
            
             
-            const data = await fetch('https://omdbapi.com/?apiKey=e01cae03&s=' + search.trim().split(' ').join('+'))
+            const data = await fetch('https://omdbapi.com/?apiKey='+process.env.REACT_APP_OMDB_API_KEY+'&s=' + search.trim().split(' ').join('+'))
 
             const json = await data.json()
 

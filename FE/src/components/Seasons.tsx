@@ -17,7 +17,7 @@ const Seasons:React.FC<{title:string|undefined,imdbID:string,season:number,tmdbI
 
     const queryKey = title? title+season: ''
     const {data, status, error} = useQuery(queryKey, async()=>{
-        const episodes = await fetch(`https://api.themoviedb.org/3/tv/${tmdbID}/season/${season}?api_key=10f8c2fd223cb238d5aa4da9ec89c4e9`)
+        const episodes = await fetch(`https://api.themoviedb.org/3/tv/${tmdbID}/season/${season}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`)
         const episodes_json = await episodes.json()
         return episodes_json['episodes']
     }
