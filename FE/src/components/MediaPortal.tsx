@@ -10,7 +10,7 @@ const MediaPortal: React.FC<{mediaType:string,imdbID:string,episode?:number,seas
 
                 <div className="z-20 w-full bg-black h-3/4 md:w-1/2 md:h-1/2" >
                 <iframe
-                src={` https://www.2embed.to/embed/imdb/${mediaType==='series'?'tv':'movie'}?id=${imdbID}${mediaType==='series'?'&s='+props.season+'&e='+props.episode:''}`}
+                src={`${process.env.REACT_APP_PLAYER_URL}/${mediaType==='series'?'tv':'movie'}?id=${imdbID}${mediaType==='series'?'&s='+props.season+'&e='+props.episode:''}`}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
