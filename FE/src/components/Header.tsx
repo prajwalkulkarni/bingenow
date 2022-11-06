@@ -23,9 +23,18 @@ const Header: React.FC<{}> = (props) => {
     return (
         <div className="flex justify-between w-full p-4 bg-gray-100">
             <p>Logo</p>
-            {ctx.auth && <Search />}
+            {ctx.auth && <>
+                <Search />
+                <div className="flex items-center text-violet-800">
+                    <Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/'>Movies</Link>
+                    <Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/shows'>Series</Link>
+                    <Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/watchlist'>Watchlist</Link>
+                    <Button className='ml-2' onClick={signoutHandler}><LockIcon/>Sign out</Button>
+                </div>
+            </>}
             {!ctx.auth && <Link to='/login' className="p-2 font-bold text-white rounded-md bg-violet-800 hover:bg-violet-900"><LockIcon/>Sign in</Link>}
-            {ctx.auth && <Button onClick={signoutHandler}><LockIcon/>Sign out</Button>}
+
+
         </div>
     )
 }
