@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useCallback} from 'react';
 
 
 
@@ -8,13 +8,13 @@ const useAuth = (conditionCB:Function) => {
     const [focus, setFocus] = React.useState(false);
     const [isBlurred, setIsBlurred] = React.useState(false);
     
-    const isValid = conditionCB(val) && focus;
+    const isValid = conditionCB(val);
     const isInvalid = !conditionCB(val) && isBlurred;
 
-    const onChange = (e:React.ChangeEvent<HTMLInputElement>) => setVal(e.target.value);
+    const onChange = useCallback((e:React.ChangeEvent<HTMLInputElement>) => setVal(e.target.value),[]);
 
-    const onBlurHandler = () => setIsBlurred(true);
-    const onFocusHandler = () => setFocus(true)
+    const onBlurHandler = useCallback(() => setIsBlurred(true),[]);
+    const onFocusHandler = useCallback(() => setFocus(true),[])
 
 
     return {
