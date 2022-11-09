@@ -1,6 +1,6 @@
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState,useCallback } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { emailRegEx } from '../CONSTANTS'
 import { app } from '../firebase'
 import { useMutation } from 'react-query'
@@ -9,7 +9,9 @@ import { motion } from 'framer-motion'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Button from '../../UI/Button'
+import GoogleIcon from '@mui/icons-material/Google';
 import Feature from '../components/Feature'
+import Context from '../context/Context'
 
 const provider = new GoogleAuthProvider();
 
@@ -22,7 +24,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 const Login: React.FC<{}> = () => {
 
-
+    const ctx = useContext(Context)
+    const navigate = useNavigate()
     const [open, setOpen] = useState(false);
     const auth = getAuth(app)
     const { val: password, isInvalid, isValid, onBlurHandler, onFocusHandler, onChangeHandler } = useAuth((val: string) => val.length >= 8)
@@ -31,40 +34,58 @@ const Login: React.FC<{}> = () => {
 
     const formIsValid = isValid && emailIsValid
 
-    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    
+    const handleClose = useCallback((event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
         }
 
         setOpen(false);
-    };
+    },[]);
 
     const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
+        
         try {
             if (formIsValid) {
 
                 const userCredential = await signInWithEmailAndPassword(auth, email, password)
 
-                return userCredential
+                if(userCredential.user.emailVerified){
+                    ctx.setAuth(true)
+                    ctx.setUsername(userCredential.user?.displayName)
+                    localStorage.setItem('auth', JSON.stringify(true))
+                    localStorage.setItem('username', JSON.stringify(userCredential.user?.displayName))
+                    navigate('/', { replace: true })
+                    return userCredential
+                }else{
+                    throw new Error('Please verify your email address.')
+                }
             }
         }
         catch (error: any) {
             const errorCode = error.code;
             const errorMessage = error.message;
             setOpen(true)
+            ctx.setAuth(false)
+            ctx.setUsername(null)
             return errorMessage
         }
     }
 
-    const socialLogin = async () => {
+    const socialLogin = useCallback(async () => {
         try {
             const result = await signInWithPopup(auth, provider)
             const credential = GoogleAuthProvider.credentialFromResult(result);
             const token = credential?.accessToken;
             // The signed-in user info.
+            ctx.setAuth(true)
             const user = result.user;
+            localStorage.setItem('auth', JSON.stringify(true))
+            localStorage.setItem('username', JSON.stringify(user?.displayName))
+            ctx.setUsername(user.displayName)
+            navigate('/', { replace: true })
 
         }
         catch (error: any) {
@@ -74,10 +95,12 @@ const Login: React.FC<{}> = () => {
             const email = error.customData.email;
             // The AuthCredential type that was used.
             setOpen(true)
+            ctx.setAuth(false)
+            ctx.setUsername(null)
             const credential = GoogleAuthProvider.credentialFromError(error);
         }
 
-    }
+    },[])
 
 
     const { isLoading, error, data, mutate } = useMutation(loginHandler, {
@@ -140,8 +163,8 @@ const Login: React.FC<{}> = () => {
 
                     <hr className='h-px py-1' />
                     <div
-                        className='flex items-center justify-center py-2 space-x-2 border border-gray-400 rounded-md cursor-pointer'
-                        onClick={socialLogin}>Signin with Google account</div>
+                        className='flex items-center justify-center py-2 space-x-2 border border-gray-400 rounded-md cursor-pointer hover:bg-slate-200'
+                        onClick={socialLogin}><GoogleIcon/><span className='px-1'>Signin with Google</span></div>
                 </div>
 
             </div>
