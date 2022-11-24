@@ -28,7 +28,7 @@ const Header: React.FC<{}> = (props) => {
                 <div className="flex items-center text-violet-800">
                     <Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/'>Movies</Link>
                     <Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/shows'>Series</Link>
-                    <Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/watchlist'>Watchlist</Link>
+                    <Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/mywatchlist'>Watchlist</Link>
                     <Button className='ml-2' onClick={signoutHandler}><LockIcon/>Sign out</Button>
                 </div>
             </>}
