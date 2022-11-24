@@ -1,26 +1,18 @@
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import React, { useContext, useState,useCallback } from 'react'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import React, { useContext, useState,useCallback, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { emailRegEx } from '../CONSTANTS'
 import { app } from '../firebase'
 import { useMutation } from 'react-query'
 import useAuth from '../hooks/useAuth'
 import { motion } from 'framer-motion'
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Button from '../../UI/Button'
-import GoogleIcon from '@mui/icons-material/Google';
+import useFetch from '../hooks/useFetch'
 import Feature from '../components/Feature'
 import Context from '../context/Context'
+import SocialLogin from '../common/SocialLogin'
+import SnackbarExtended from '../../UI/SnackbarExtended'
 
-const provider = new GoogleAuthProvider();
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-    props,
-    ref,
-) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 const Login: React.FC<{}> = () => {
 
@@ -34,7 +26,38 @@ const Login: React.FC<{}> = () => {
 
     const formIsValid = isValid && emailIsValid
 
+
+    const {isLoading:dbIsLoading, error:dbError, data:dbData, mutate:dbMutate} = useFetch({
+        method:'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept':'*'
+        },
+        body: JSON.stringify({
+            query: `
+            mutation {
+                createOrGetUser(email:"${email}"){
+                    id
+                    email
+                }
+            }
+            `
+        })
+    },'mutate')
     
+
+    useEffect(()=>{
+        if(dbData){
+            console.log(dbData)
+            ctx.setAuth(true)
+            ctx.setUsername(dbData.user?.displayName)
+            localStorage.setItem('userId', JSON.stringify((dbData as any).data.createOrGetUser.id))
+        
+            localStorage.setItem('auth', JSON.stringify(true))
+            localStorage.setItem('username', JSON.stringify(dbData.user?.displayName))
+            navigate('/', { replace: true })
+        }
+    },[dbData])
     const handleClose = useCallback((event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
@@ -53,11 +76,9 @@ const Login: React.FC<{}> = () => {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password)
 
                 if(userCredential.user.emailVerified){
-                    ctx.setAuth(true)
-                    ctx.setUsername(userCredential.user?.displayName)
-                    localStorage.setItem('auth', JSON.stringify(true))
-                    localStorage.setItem('username', JSON.stringify(userCredential.user?.displayName))
-                    navigate('/', { replace: true })
+                    
+                    dbMutate()
+                    
                     return userCredential
                 }else{
                     throw new Error('Please verify your email address.')
@@ -74,35 +95,6 @@ const Login: React.FC<{}> = () => {
         }
     }
 
-    const socialLogin = useCallback(async () => {
-        try {
-            const result = await signInWithPopup(auth, provider)
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential?.accessToken;
-            // The signed-in user info.
-            ctx.setAuth(true)
-            const user = result.user;
-            localStorage.setItem('auth', JSON.stringify(true))
-            localStorage.setItem('username', JSON.stringify(user?.displayName))
-            ctx.setUsername(user.displayName)
-            navigate('/', { replace: true })
-
-        }
-        catch (error: any) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            setOpen(true)
-            ctx.setAuth(false)
-            ctx.setUsername(null)
-            const credential = GoogleAuthProvider.credentialFromError(error);
-        }
-
-    },[])
-
-
     const { isLoading, error, data, mutate } = useMutation(loginHandler, {
         mutationKey: 'login',
     })
@@ -111,13 +103,7 @@ const Login: React.FC<{}> = () => {
         <Feature image='cover'>
             <div className='flex items-center justify-center min-h-[80vh]'>
 
-                <Snackbar open={open} autoHideDuration={6000}
-                    onClose={handleClose}
-                    anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
-                    <Alert severity="error" sx={{ width: '100%' }}>
-                        {data}
-                    </Alert>
-                </Snackbar>
+                <SnackbarExtended open={open} handleClose={handleClose} severity='error' message={data} />
                 <div className='w-3/4 px-4 py-3 bg-white rounded-lg sm:mx-auto sm:w-full sm:max-w-md'>
                     <form onSubmit={mutate}
                         className='flex flex-col'>
@@ -162,9 +148,7 @@ const Login: React.FC<{}> = () => {
                     </form>
 
                     <hr className='h-px py-1' />
-                    <div
-                        className='flex items-center justify-center py-2 space-x-2 border border-gray-400 rounded-md cursor-pointer hover:bg-slate-200'
-                        onClick={socialLogin}><GoogleIcon/><span className='px-1'>Signin with Google</span></div>
+                    <SocialLogin dbMutate={dbMutate} data={dbData}/>
                 </div>
 
             </div>
