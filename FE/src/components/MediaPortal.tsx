@@ -4,6 +4,7 @@ import React from "react";
 const MediaPortal: React.FC<{mediaType:string,imdbID:string,episode?:number,season?:number,onClick:React.MouseEventHandler<HTMLDivElement>}> = (props) => {
 
     const {mediaType,imdbID} = props
+    
     return (
         <div className="fixed top-0 left-0 z-10 flex items-center justify-center w-screen h-screen bg-black" onClick={props.onClick}>
             
