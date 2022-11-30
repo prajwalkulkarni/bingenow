@@ -1,31 +1,27 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React,{useContext, useEffect} from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { emailRegEx } from '../CONSTANTS'
 import { app } from '../firebase'
+import Context from '../context/Context'
 import useAuth from '../hooks/useAuth'
 import { useMutation } from 'react-query'
-import { motion } from 'framer-motion'
+import { motion, useUnmountEffect } from 'framer-motion'
+import Feature from '../components/Feature'
 import {
     getAuth, createUserWithEmailAndPassword,
-    sendEmailVerification, updateProfile, GoogleAuthProvider,
-    signInWithPopup
+    sendEmailVerification, updateProfile
 } from "firebase/auth";
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Button from '../../UI/Button'
-import Feature from '../components/Feature'
-const provider = new GoogleAuthProvider();
+import useFetch from '../hooks/useFetch'
+import SocialLogin from '../common/SocialLogin'
+import SnackbarExtended from '../../UI/SnackbarExtended'
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-    props,
-    ref,
-) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 const Signup: React.FC<{}> = () => {
     const auth = getAuth(app);
 
+    const ctx = useContext(Context)
+    const navigate = useNavigate()
 
     const { val: password, isInvalid, isValid, onBlurHandler, onFocusHandler, onChangeHandler } = useAuth((val: string) => val.length >= 8)
     const { val: email, isInvalid: emailIsInvalid, isValid: emailIsValid, onBlurHandler: emailOnBlurHandler,
@@ -37,51 +33,73 @@ const Signup: React.FC<{}> = () => {
 
     const formValid = isValid && emailIsValid && nameIsValid
 
+    const [open, setOpen] = React.useState(false);
+    const [snackbarData, setSnackbarData] = React.useState<{message:string,severity:'error'|'success'|'info'|'warning'}>({
+        message: '',
+        severity: 'success'
+    })
 
+    const {isLoading:dbIsLoading, error:dbError, data:dbData, mutate:dbMutate} = useFetch({
+        method:'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept':'*'
+        },
+        body: JSON.stringify({
+            query: `
+            mutation {
+                createOrGetUser(email:"${email}"){
+                    id
+                    email
+                }
+            }
+            `
+        })
+    },'mutate')
 
-    const socialLogin = async () => {
-        try {
-            const result = await signInWithPopup(auth, provider)
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential?.accessToken;
-            // The signed-in user info.
-            const user = result.user;
-
-        }
-        catch (error: any) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-        }
-
-    }
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if (formValid) {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-            await updateProfile(userCredential.user, { displayName: name })
-            await sendEmailVerification(userCredential.user)
-            return userCredential
+        try{
+            if (formValid) {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+                await updateProfile(userCredential.user, { displayName: name })
+                await sendEmailVerification(userCredential.user)
+    
+                await dbMutate()
+                return userCredential
+            }
+        }
+        catch(err){
+            console.log("Error in creating user",err)
+            setOpen(true)
+            setSnackbarData({
+                message: 'Something went wrong',
+                severity: 'error'
+            })
         }
     }
     const { isLoading, error, data, mutate } = useMutation(submitHandler)
-    const { isLoading: socialLoginLoading, error: socialLoginError, data: socialLoginData } = useMutation(socialLogin)
 
+    useEffect(() => {
+        if (data&& !isLoading) {
+            setOpen(true)
+            setSnackbarData({
+                message: 'An email has been sent to your email address. Please verify your email address.',
+                severity: 'success'
+            })
+
+        }
+    }, [data])
+    // const { isLoading: socialLoginLoading, error: socialLoginError, data: socialLoginData } = useMutation(socialLogin)
+
+    console.log(data,error)
     return (
         <Feature image='cover'>
             <div className='flex items-center justify-center min-h-[80vh]'>
 
-                <Snackbar open={data && !isLoading} autoHideDuration={6000}
-                    onClose={() => console.log('close')}
-                    anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
-                    <Alert severity="success" sx={{ width: '100%' }}>
-                        An email has been sent to your email address. Please verify your email address.
-                    </Alert>
-                </Snackbar>
+                <SnackbarExtended open={open} severity={snackbarData.severity} message={snackbarData.message}
+                handleClose={()=>setOpen(false)}/>
                 <div className='w-3/4 px-4 py-3 bg-white rounded-lg sm:mx-auto sm:w-full sm:max-w-md'>
                     <form onSubmit={mutate} className='flex flex-col'>
 
@@ -122,7 +140,7 @@ const Signup: React.FC<{}> = () => {
                             {isInvalid && <p className='text-red-500'>Password must be at least 8 characters</p>}
                         </div>
                         <Button type="submit"
-                            disabled={!!data || isLoading || socialLoginLoading}
+                            disabled={!!data || isLoading }
                             className='flex justify-center p-2 text-white rounded-md bg-violet-800 hover:bg-violet-900'>
 
                             {isLoading ?
@@ -139,9 +157,7 @@ const Signup: React.FC<{}> = () => {
                     </form>
 
                     <hr className='h-px py-1' />
-                    <div
-                        className='flex items-center justify-center py-2 space-x-2 border border-gray-400 rounded-md cursor-pointer'
-                        onClick={socialLogin}>Signup with Google account</div>
+                    <SocialLogin dbMutate={dbMutate} data={dbData}/>
                 </div>
 
             </div>
