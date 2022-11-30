@@ -35,6 +35,11 @@ const Movie: React.FC<{}> = (props) => {
 
     const [open, setOpen] = useState(false);
 
+    const [toast, setToast] = useState<{message:string,severity:"success" | "error" | "info" | "warning"}>({
+        message: '',
+        severity: 'success'
+    })
+
     const [season, setSeason] = React.useState(1)
 
     const [play, setPlay] = React.useState(false)
@@ -137,11 +142,17 @@ const Movie: React.FC<{}> = (props) => {
     useEffect(()=>{
         if(!addToWatchlistIsLoading&& watchListData){
             setOpen(true)
+            
+            const [message,severity] = getMessage(watchListData)
+            setToast({
+                message,
+                severity
+            })
         }
     },[addToWatchlistIsLoading, watchListData])
 
 
-    const [message,severity] = getMessage(watchListData)
+    
     
     return (
         <main>
@@ -153,7 +164,7 @@ const Movie: React.FC<{}> = (props) => {
 
                     <div className='flex'>
                         <div className='flex flex-col p-6 md:w-1/2'>
-                        <SnackbarExtended open={open} message={message} severity={severity} handleClose={handleClose}/>
+                        <SnackbarExtended open={open} message={toast.message} severity={toast.severity} handleClose={handleClose}/>
                             {data ? <p className='text-5xl font-bold text-white'>{data.title}</p> : <div className='w-full h-6 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
                             <div className='flex py-3'>
                                 {mediaType === 'series' && <FormControl sx={{ minWidth: 120 }} size="small"
