@@ -51,7 +51,7 @@ const Search = () => {
 
     
     return (
-        <div className='relative w-1/2 lg:w-1/4'>
+        <div className='relative w-full md:w-1/2 lg:w-1/4'>
             <input type='text' className='w-full p-2 rounded-md' value={search} onChange={handleSearch} placeholder='Search' />
             
             {isError && <p>Error</p>}
