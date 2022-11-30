@@ -8,6 +8,7 @@ import { QueryClientProvider, QueryClient } from "react-query"
 import Home from "./pages/Home"
 import Movie from "./pages/Movie"
 import Context from "./context/Context"
+import Watchlist from "./pages/Watchlist"
 const queryClient = new QueryClient()
 let routes;
 const App: React.FC = () => {
@@ -20,6 +21,7 @@ const App: React.FC = () => {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/:mediaType/:imdbID/" element={<Movie/>} />
+                <Route path="/mywatchlist" element={<Watchlist/>} />
                 <Route path="*" element={<Navigate to='/' replace/>} />
             </Routes>
         
