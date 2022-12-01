@@ -1,0 +1,87 @@
+import React, { useEffect } from 'react';
+import Card from '../../UI/Card';
+import { Link } from 'react-router-dom';
+import Button from '../../UI/Button';
+import { motion } from 'framer-motion';
+import useFetch from '../hooks/useFetch';
+
+type WatchlistType = {
+    imdbId: string,
+    title: string,
+    poster: string,
+    plot: string,
+    runtime: string,
+    year: string,
+    genre: string,
+    media: string,
+    rerenderer: (imdbId:string) => void,
+}
+const Watchlistitem: React.FC<WatchlistType> = (props) => {
+
+    const { imdbId, title, poster, rerenderer, plot, runtime, year, genre, media } = props;
+
+
+    const { isLoading: watchlistRmLoading, error: watchListRmError, data: watchListRmData, mutate: watchlistMutate } = useFetch({
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': '*'
+        },
+        body: JSON.stringify({
+            query: `
+            mutation {
+                removeFromWatchlist(imdbId:"${imdbId}",id:"${JSON.parse(localStorage.getItem('userId')!)}"){
+                    imdbId
+                    title
+                }
+            }
+            `
+        })
+    }, 'mutate')
+
+    useEffect(() => {
+
+        if(!!watchListRmData){
+            rerenderer(imdbId)
+        }
+
+    }, [watchListRmData])
+
+    return (
+        <Card>
+            <div className="flex flex-col my-2 md:flex-row">
+                <img src={poster} alt="poster" className="w-full p-1 rounded-r-none md:w-1/3 rounded-l-md" />
+                <div className="flex flex-col p-2">
+
+                    <p className="text-3xl font-bold">{title}</p>
+                    <p className="text-sm">{year}</p>
+                    <p className="text-md">{genre}</p>
+                    <p className="text-md">{runtime}</p>
+
+                    <p className="text-sm">{plot}</p>
+
+                    <div className='flex h-full my-1 md:items-end'>
+
+                        <Link className='mx-1' to={`/${media}/${imdbId}`}>
+                            <Button>Watch</Button></Link>
+
+                        <Button onClick={()=>watchlistMutate()}>
+                            {watchlistRmLoading ?
+                                <motion.div
+                                    animate={{
+                                        transform: 'rotate(360deg)',
+                                        transition: { duration: 1, repeat: Infinity, repeatType: 'loop' }
+
+                                    }}
+
+                                    className='w-6 h-6 border-t-2 border-l-2 border-white rounded-xl'></motion.div> : 'Remove'}
+                        </Button>
+                    </div>
+
+                </div>
+            </div>
+        </Card>
+    )
+}
+
+export default Watchlistitem
