@@ -150,8 +150,6 @@ const Movie: React.FC<{}> = (props) => {
             })
         }
     },[addToWatchlistIsLoading, watchListData])
-
-
     
     
     return (
@@ -166,9 +164,9 @@ const Movie: React.FC<{}> = (props) => {
                         <div className='flex flex-col p-6 md:w-1/2'>
                         <SnackbarExtended open={open} message={toast.message} severity={toast.severity} handleClose={handleClose}/>
                             {data ? <p className='text-5xl font-bold text-white'>{data.title}</p> : <div className='w-full h-6 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
-                            <div className='flex py-3'>
+                            <div className='flex flex-col py-3 md:flex-row md:items-center'>
                                 {mediaType === 'series' && <FormControl sx={{ minWidth: 120 }} size="small"
-                                className='text-white border-none bg-violet-800 hover:border-none hover:text-white'>
+                                className='text-white border-none h-fit w-fit bg-violet-800 hover:border-none hover:text-white'>
                                     
                                     <Select
                                         labelId="demo-select-small"
@@ -192,12 +190,12 @@ const Movie: React.FC<{}> = (props) => {
                                         })}
                                     </Select>
                                 </FormControl>}
-                                {data ? <>
+                                {data ? <div className='flex flex-col md:flex-row'>
                                     <p className='text-lg font-semibold text-white sm:px-1'><AccessTimeIcon /> {data.runtime}</p>
-                                    <p className='text-lg font-semibold text-white sm:px-1'>|</p>
+                                    <p className='hidden text-lg font-semibold text-white md:flex sm:px-1 md:px-1'>|</p>
                                     <p className='text-lg font-semibold text-white sm:px-1'>IMDB Rating: {data.imdbRating}</p>
-                                    <p className='text-lg font-semibold text-white sm:px-1'>|</p>
-                                    <p className='text-lg font-semibold text-white sm:px-1'>Year: {data.year}</p></> : <div className='w-full h-4 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
+                                    <p className='hidden px-1 text-lg font-semibold text-white md:flex md: sm:px-1'>|</p>
+                                    <p className='text-lg font-semibold text-white sm:px-1'>Year: {data.year}</p></div> : <div className='w-full h-4 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
 
                             </div>
                             {data ? <p className='p-1 text-lg text-white'>{data.plot}</p> : <div className='w-full h-8 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
