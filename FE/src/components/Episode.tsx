@@ -19,13 +19,13 @@ const Episode: React.FC<Props> = (props) => {
     const [play, setPlay] = React.useState(false)
 
     return (
-        <div className='flex p-1 m-2 bg-white'>
+        <div className='flex flex-col p-1 m-2 bg-white md:flex-row'>
 
             {play && ReactDOM.createPortal(<MediaPortal 
             mediaType='series' imdbID={imdbID} 
             onClick={()=>setPlay(false)}
             season={season} episode={episode} />, document.getElementById('portal') as HTMLElement)}
-            <img src={`https://image.tmdb.org/t/p/w500${image}`} alt={name} className='object-contain w-1/4' />
+            <img src={`https://image.tmdb.org/t/p/w500${image}`} alt={name} className='object-contain w-full md:w-1/4' />
             <div className='flex flex-col ml-2'>
                 <h1 className='text-2xl font-bold'>{name}</h1>
                 <p className='text-md'>{overview}</p>
