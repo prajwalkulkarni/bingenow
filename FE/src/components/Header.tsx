@@ -48,9 +48,12 @@ const Header: React.FC<{}> = (props) => {
                     {ctx.auth && <>
                         <Search />
                         <div className="items-center hidden md:flex text-violet-800">
-                            <Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/'>Movies</Link>
-                            <Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/shows'>Series</Link>
-                            <Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/mywatchlist'>Watchlist</Link>
+                            <Link
+                            className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/'>Movies</Link>
+                            <Link
+                            className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/shows'>Series</Link>
+                            <Link
+                            className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/mywatchlist'>Watchlist</Link>
                             <Button className='ml-2' onClick={signoutHandler}><LockIcon />Sign out</Button>
                         </div>
                     </>}
@@ -61,35 +64,21 @@ const Header: React.FC<{}> = (props) => {
 
             <div className={`${hideMobileMenu?'hidden ':''}mobile-menu transition-all`}>
                 <ul className="md:hidden">
-                    <li className="active"><Link to="/" className="block px-2 py-4 text-sm text-center hover:text-white hover:bg-violet-800">Movies</Link></li>
-                    <li><Link to="/shows" className="block px-2 py-4 text-sm text-center transition duration-300 hover:bg-violet-800 hover:text-white">Series</Link></li>
-                    <li><Link to="/mywatchlist" className="block px-2 py-4 text-sm text-center transition duration-300 hover:bg-violet-800 hover:text-white">Watchlist</Link></li>
+                    <li className="active"><Link to="/" 
+                    onClick={()=>setToggleMobileMenu(true)}
+                    className="block px-2 py-4 text-sm text-center hover:text-white hover:bg-violet-800">Movies</Link></li>
+                    <li><Link 
+                    onClick={()=>setToggleMobileMenu(true)}
+                    to="/shows" className="block px-2 py-4 text-sm text-center transition duration-300 hover:bg-violet-800 hover:text-white">Series</Link></li>
+                    <li><Link 
+                    onClick={()=>setToggleMobileMenu(true)}
+                    to="/mywatchlist" className="block px-2 py-4 text-sm text-center transition duration-300 hover:bg-violet-800 hover:text-white">Watchlist</Link></li>
                     <li><Button className='flex justify-center w-full rounded-none' onClick={signoutHandler}><LockIcon />Sign out</Button></li>
                 </ul>
             </div>
-
         </nav>
     )
 }
 
 
 export default Header
-
-
-/*
-<div className="flex flex-wrap justify-between w-full p-4 bg-gray-100">
-                <p>Logo</p>
-                {ctx.auth && <>
-                    <Search />
-                    <div className="flex items-center text-violet-800">
-                        <li><Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/'>Movies</Link></li>
-                        <li><Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/shows'>Series</Link></li>
-                        <li><Link className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800" to='/mywatchlist'>Watchlist</Link></li>
-                        <Button className='ml-2' onClick={signoutHandler}><LockIcon />Sign out</Button>
-                    </div>
-                </>}
-                {!ctx.auth && <li><Link to='/login' className="p-2 font-bold text-white rounded-md bg-violet-800 hover:bg-violet-900"><LockIcon />Sign in</Link></li>}
-
-
-            </div>
-            */
