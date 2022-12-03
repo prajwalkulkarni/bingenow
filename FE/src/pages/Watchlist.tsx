@@ -34,8 +34,12 @@ const Watchlist:React.FC = () => {
 
     useEffect(() => {
         if(!!watchListData){
-            setWatchlist(watchListData.data.watchlist)
+            console.log(watchListData)
+            setWatchlist(watchListData.data.watchlist??[])
         }
+
+       
+        
     }, [watchListData])
 
 
@@ -47,11 +51,12 @@ const Watchlist:React.FC = () => {
        
     return (
         <div>
+                   
             <p className='self-start p-3 text-5xl font-bold'>My Watchlist</p>
             
             {watchlistIsLoading && <div className='flex justify-center h-full'><CircularProgress /></div>}
             {watchListError && <p>Error</p>}
-            {watchListData && watchlist.map((item:any) => {
+            {watchListData && watchlist?.map((item:any) => {
                 return (
                     <Watchlistitem
                         key={item.imdbId}
