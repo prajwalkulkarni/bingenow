@@ -16,18 +16,18 @@ The following is the projected technologies that will be used in this project.
 ### Frontend:
 
 - UI Library - React with typescript
-- Authentication - Supabase (Suggestions are welcome)
+- Authentication - Firebase
 - State management and caching - React query
-- Styling - vanilla CSS
+- Styling - TailwindCSS
 - Build tool - webpack
 
 
 ### Backend:
 
 - Server - Node.js with express (TypeScript)
-- Database - MongoDB(Suggestions are welcome)
+- Database - MongoDB
 - Hosting - Vercel for frontend, EC2 or lambda for backend(Suggestions are welcome)
-- API - GraphQL(likely, yet to confirm)
+- API - GraphQL
 
 
 ### Scope
