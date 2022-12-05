@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Card from '../../UI/Card';
 import { Link } from 'react-router-dom';
 import Button from '../../UI/Button';
 import { motion } from 'framer-motion';
 import useFetch from '../hooks/useFetch';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AlbumIcon from '@mui/icons-material/Album';
+import SnackbarExtended from '../../UI/SnackbarExtended';
+import getMessage from '../common/getMessage';
 
 type WatchlistType = {
     imdbId: string,
@@ -43,20 +47,24 @@ const Watchlistitem: React.FC<WatchlistType> = (props) => {
 
         if(!!watchListRmData){
             rerenderer(imdbId)
+            
         }
+
 
     }, [watchListRmData])
 
+
     return (
         <Card>
+     
             <div className="flex flex-col my-2 md:flex-row">
                 <img src={poster} alt="poster" className="w-full p-1 rounded-r-none md:w-1/3 rounded-l-md" />
                 <div className="flex flex-col p-2">
 
                     <p className="text-3xl font-bold">{title}</p>
                     <p className="text-sm">{year}</p>
-                    <p className="text-md">{genre}</p>
-                    <p className="text-md">{runtime}</p>
+                    <p className="text-md"><AlbumIcon/> &nbsp;- {genre}</p>
+                    <p className="text-md"><AccessTimeIcon/> &nbsp;- {runtime}</p>
 
                     <p className="text-sm">{plot}</p>
 
@@ -65,7 +73,7 @@ const Watchlistitem: React.FC<WatchlistType> = (props) => {
                         <Link className='mx-1' to={`/${media}/${imdbId}`}>
                             <Button>Watch</Button></Link>
 
-                        <Button onClick={()=>watchlistMutate()}>
+                        <Button onClick={()=>watchlistMutate()} className='bg-red-500 hover:bg-red-600'>
                             {watchlistRmLoading ?
                                 <motion.div
                                     animate={{
