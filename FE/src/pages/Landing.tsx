@@ -117,7 +117,7 @@ const Landing: React.FC = () => {
                                     hidden: { x: -800 }
                                 }}
                                 className='flex justify-center md:justify-start'>
-                                <img src={require('../assets/cover/card2.jpg')} className='w-full md:w-4/5'/>
+                                <img src={require('../assets/cover/tvframe.jpg')} className='w-full md:w-4/5'/>
                             </motion.div>
 
 

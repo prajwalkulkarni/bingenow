@@ -8,7 +8,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Button from '../../UI/Button';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AlbumIcon from '@mui/icons-material/Album';
 
@@ -154,7 +153,7 @@ const Home: React.FC = () => {
 
                 <div
 
-                    className='flex relative overflow-hidden flex-col justify-center items-center min-h-[60vh]'
+                    className='flex relative overflow-hidden flex-col justify-center items-center min-h-[30vh] md:min-h-[60vh]'
                 >
                     <SnackbarExtended open={open} message={message} severity={severity} handleClose={handleClose} />
                     <div className='z-10 flex justify-between w-full px-2'>
@@ -162,13 +161,15 @@ const Home: React.FC = () => {
                         <button className='text-white' onClick={() => setCount(p => p > 6 ? 1 : (p + 1) % 7)}><ArrowForwardIosIcon /></button>
                     </div>
 
+                    
 
-                    {carouselSlides.map((media_data_carousel: any, i: number) => {
+
+                    {carouselData ? carouselSlides.map((media_data_carousel: any, i: number) => {
                         return (
                         
                                 <div
                                 key={i}
-                                className={`absolute z-0 flex w-4/5 h-full mx-10 ${(count ===1 && prevCount.current ===5) || (count === 5 && prevCount.current === 1)?'transition-none':'transition duration-500 ease-in-out transform'} border-2 rounded-lg border-red hover:scale-105`}
+                                className={`absolute z-0 flex w-4/5 h-full mx-5 ${(count ===1 && prevCount.current ===5) || (count === 5 && prevCount.current === 1)?'transition-none':'transition duration-500 ease-in-out transform'}`}
 
                                 style={{
                                     backgroundImage: `url(${media_data_carousel.poster})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover',
@@ -180,22 +181,22 @@ const Home: React.FC = () => {
                                 <div
                                     className='absolute w-4/5 h-full p-1 bg-gradient-to-r from-black to-transparent'>
                                     {play && ReactDOM.createPortal(<MediaPortal
-                                        mediaType='movie' imdbID={carouselData ? media_data_carousel.imdbId : ''}
+                                        mediaType='movie' imdbID={media_data_carousel.imdbId}
                                         onClick={() => setPlay(false)} />, document.getElementById('portal')!)}
                                     <div className='flex'>
                                         <div className='flex flex-col p-6 md:w-4/5'>
-                                            {carouselData ? <p className='text-5xl font-bold text-white'>{media_data_carousel.title}</p> : <div className='min-w-[80vw] md:w-full h-6 my-2 text-6xl font-bold bg-gray-600 animate-pulse'></div>}
-                                            {carouselData ? <p className='p-1 text-lg text-white'>{media_data_carousel.plot}</p> : <div className='min-w-[80vw] md:w-full h-8 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
+                                            <p className='text-3xl font-bold text-white md:text-5xl'>{media_data_carousel.title}</p>
+                                            <p className='hidden p-1 text-lg text-white md:block'>{media_data_carousel.plot}</p>
 
                                             <div className='flex flex-col justify-start mt-4 md:items-center md:flex-row'>
-                                                {carouselData ? <p className='flex items-center px-1 text-lg font-semibold text-white'><AlbumIcon /> &nbsp;- {media_data_carousel.genre}</p> : <div className='w-full h-4 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
+                                                <p className='flex items-center px-1 text-lg font-semibold text-white'><AlbumIcon /> &nbsp;- {media_data_carousel.genre}</p> 
                                                 <p className='hidden text-lg font-semibold text-white md:flex sm:px-1 md:px-1'>|</p>
-                                                {carouselData ? <p className='flex items-center px-1 text-lg font-semibold text-white'><CalendarMonthIcon /> &nbsp;- {media_data_carousel.year}</p> : <div className='w-full h-4 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
+                                                <p className='flex items-center px-1 text-lg font-semibold text-white'><CalendarMonthIcon /> &nbsp;- {media_data_carousel.year}</p> 
                                                 <p className='hidden text-lg font-semibold text-white md:flex sm:px-1 md:px-1'>|</p>
-                                                {carouselData ? <p className='flex items-center px-1 text-lg font-semibold text-white'><AccessTimeIcon /> &nbsp;- {media_data_carousel.runtime}</p> : <div className='w-full h-4 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
+                                                <p className='flex items-center px-1 text-lg font-semibold text-white'><AccessTimeIcon /> &nbsp;- {media_data_carousel.runtime}</p> 
                                             </div>
 
-                                            <div className='flex'>
+                                            <div className='flex justify-between md:justify-start'>
                                                 {
                                                     carouselData ?
                                                         <>
@@ -204,7 +205,7 @@ const Home: React.FC = () => {
                                                                 onClick={() => setPlay(true)}><PlayCircleOutlineIcon />Watch</Button>
 
                                                             <Button
-                                                                className='mx-1' onClick={watchlistMutate}>
+                                                                className='mx-1 text-sm md:text-lg' onClick={watchlistMutate}>
                                                                 {addToWatchlistIsLoading ?
                                                                     <motion.div
                                                                         animate={{
@@ -227,7 +228,43 @@ const Home: React.FC = () => {
                             </div>
                             )
                         }
-                    )}
+                    ):
+                    new Array(3).fill(0).map((_, i) => {
+                        return (
+                            <div
+                                key={i}
+                                className='absolute z-0 flex w-4/5 h-full mx-10 border-2 rounded-lg border-red'
+                                style={{
+                                    transform: `translateX(${(i - count) * 100}%)`,
+                                }}
+                            >
+                                <div
+                                    className='absolute w-4/5 h-full p-1 bg-gradient-to-r from-black to-transparent'>
+                                    <div className='flex'>
+                                        <div className='flex flex-col p-6 md:w-4/5'>
+                                            <div className='min-w-[80vw] md:w-full h-6 my-2 text-6xl font-bold bg-gray-600 animate-pulse'></div>
+                                            <div className='hidden md:visible min-w-[80vw] md:w-full h-8 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>
+
+                                            <div className='flex flex-col justify-start mt-4 md:items-center md:flex-row'>
+                                                <div className='w-full h-4 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>
+                                                <p className='hidden text-lg font-semibold text-white md:flex sm:px-1 md:px-1'>|</p>
+                                                <div className='w-full h-4 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>
+                                                <p className='hidden text-lg font-semibold text-white md:flex sm:px-1 md:px-1'>|</p>
+                                                <div className='w-full h-4 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>
+                                            </div>
+
+                                            <div className='flex'>
+                                                <div className='w-full h-8 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })
+                    }
 
 
                 </div>
