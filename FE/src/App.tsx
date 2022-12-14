@@ -19,10 +19,11 @@ const App: React.FC = () => {
         routes = (
             
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home movies={true} />} />
                 <Route path="/:mediaType/:imdbID/" element={<Movie/>} />
                 <Route path="/mywatchlist" element={<Watchlist/>} />
                 <Route path="*" element={<Navigate to='/' replace/>} />
+                <Route path='/shows' element={<Home movies={false} />} />
             </Routes>
         
         )
