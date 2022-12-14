@@ -17,20 +17,23 @@ import ReactDOM from 'react-dom';
 import useFetch from '../hooks/useFetch';
 import SnackbarExtended from '../../UI/SnackbarExtended';
 import getMessage from '../common/getMessage';
+import { useNavigate, Link } from 'react-router-dom';
 
 const db = getFirestore(app);
 
 const CardListLazy = React.lazy(() => import('../components/CardList'));
-const Home: React.FC = () => {
+const Home: React.FC<{movies:boolean}> = (props) => {
 
+    const {movies} = props
     const [count, setCount] = useState(1)
     const [play, setPlay] = useState(false)
     const [open, setOpen] = useState(false);
 
+    const navigate = useNavigate()
     const prevCount = useRef(count)
     const [carouselSlides, setCarouselSlides] = useState<any>([])
-    const { data: carouselData, isLoading, isError } = useQuery('carousel', async () => {
-        const querySnapshot = await getDocs(collection(db, 'home'));
+    const { data: carouselData, isLoading, isError } = useQuery(movies?'carousel':'carouselshows', async () => {
+        const querySnapshot = await getDocs(collection(db, movies ? 'home':'shows'));
         const data = querySnapshot.docs.map((doc) => doc.data());
 
         return data;
@@ -78,8 +81,6 @@ const Home: React.FC = () => {
         })
     }, 'mutate')
 
-
-
     useEffect(() => {
         if (!addToWatchlistIsLoading && watchListData) {
             setOpen(true)
@@ -97,8 +98,7 @@ const Home: React.FC = () => {
 
     //     return () => clearInterval(interval);
     // }, [play]);
-
-    
+  
 
     useEffect(() => {
         if (carouselData) {
@@ -130,7 +130,7 @@ const Home: React.FC = () => {
     }, []);
 
     
-    console.log(count,prevCount.current)
+    
     useEffect(()=>{
         
         if(count===6){
@@ -160,8 +160,6 @@ const Home: React.FC = () => {
                         <button className='text-white' onClick={() => setCount(p => p === 0 ? (p + 6) % 7 : (p - 1) % 7)}><ArrowBackIosIcon /></button>
                         <button className='text-white' onClick={() => setCount(p => p > 6 ? 1 : (p + 1) % 7)}><ArrowForwardIosIcon /></button>
                     </div>
-
-                    
 
 
                     {carouselData ? carouselSlides.map((media_data_carousel: any, i: number) => {
@@ -200,9 +198,13 @@ const Home: React.FC = () => {
                                                 {
                                                     carouselData ?
                                                         <>
-                                                            <Button
+                                                            {
+                                                                movies ? <Button
                                                                 className='mx-1'
                                                                 onClick={() => setPlay(true)}><PlayCircleOutlineIcon />Watch</Button>
+                                                                :
+                                                                <Button onClick={()=>navigate(`/series/${media_data_carousel.imdbId}`)}><PlayCircleOutlineIcon />Watch</Button>
+                                                            }
 
                                                             <Button
                                                                 className='mx-1 text-sm md:text-lg' onClick={watchlistMutate}>
@@ -277,7 +279,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className='flex flex-col p-2'>
-                <p className='py-3 text-5xl font-bold'>Popular animated films</p>
+                <p className='py-3 text-5xl font-bold'>Popular animated {movies?'films':'shows'}</p>
                 {isLoading ? <div className='flex justify-center'><CircularProgress /></div> : <CardListLazy category='animated' />}
             </div>
 
@@ -291,15 +293,4 @@ const Home: React.FC = () => {
     );
 }
 
-
-function returnVal(idx: number, count: number) {
-
-    if (count === 0 && idx === 4) return -1;
-
-    if (idx === 4) return -1;
-
-    if (count === 4 && idx === 0) return 1;
-
-    return idx - count;
-}
 export default Home;
