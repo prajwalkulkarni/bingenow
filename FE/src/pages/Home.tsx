@@ -280,12 +280,12 @@ const Home: React.FC<{movies:boolean}> = (props) => {
 
             <div className='flex flex-col p-2'>
                 <p className='py-3 text-5xl font-bold'>Popular animated {movies?'films':'shows'}</p>
-                {isLoading ? <div className='flex justify-center'><CircularProgress /></div> : <CardListLazy category='animated' />}
+                {isLoading ? <div className='flex justify-center'><CircularProgress /></div> : <CardListLazy category={movies?'animated':'cartoon'} />}
             </div>
 
             <div className='flex flex-col p-2'>
-                <p className='py-3 text-5xl font-bold'>Watch with friends</p>
-                {isLoading ? <div className='flex justify-center'><CircularProgress /></div> : <CardListLazy category='friends' />}
+                <p className='py-3 text-5xl font-bold'>{movies?"Watch with friends":"World of Comedy"}</p>
+                {isLoading ? <div className='flex justify-center'><CircularProgress /></div> : <CardListLazy category={movies?'friends':'comedy'} />}
             </div>
 
 
