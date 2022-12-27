@@ -24,8 +24,6 @@ const Search = () => {
         setSearch(e.target.value)
 
     }
-
-
     
     const { data, status,isLoading, isError, refetch } = useQuery(debouncedValue, async () => {
 
