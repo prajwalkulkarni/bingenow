@@ -35,6 +35,7 @@ const MediaType = new GraphQLObjectType({
         runtime: { type: GraphQLString },
         year: { type: GraphQLString },
         genre: { type: GraphQLString },
+        media: { type: GraphQLString },
     })
 })
 
@@ -47,7 +48,8 @@ const MediaInputType = new GraphQLInputObjectType({
         plot: { type: GraphQLString },
         runtime: { type: GraphQLString },
         year: { type: GraphQLString },
-        genre: { type: GraphQLString }
+        genre: { type: GraphQLString },
+        media: { type: GraphQLString },
     })
 })
 const UserType = new GraphQLObjectType({
@@ -69,8 +71,8 @@ const RootQuery = new GraphQLObjectType({
                 id: { type: GraphQLString }
             },
             resolve: async (parent: any, args: any) => {
-                const res = await User.findOne({ id: args.id }).project({ watchlist: 1 })
-                return res
+                const res = await User.findOne({ _id: args.id })
+                return res.watchlist
             }
         }
     })
@@ -146,13 +148,16 @@ const Mutation = new GraphQLObjectType({
                 id: { type: GraphQLString }
             },
             resolve: async (parent: any, args: any) => {
+                console.log(args.id)
                 const user = await User.findOne({ _id: args.id })
+                console.log(user)
                 if (user) {
                     try {
+
                         const item = user.watchlist.find((item: any) => item.imdbId === args.imdbId)
-                        console.log(item)
+                        console.log(args.imdbId,item)
                         if(item){
-                            await User.findByIdAndUpdate({ _id: args.id }, { "$pull": { "watchlist": {id:args.imdbId} }})
+                            await User.findByIdAndUpdate({ _id: args.id }, { "$pull": { "watchlist": {imdbId:args.imdbId} }})
 
                         }else{
                             throw new Error('Media does not exist in the watchlist')
@@ -182,7 +187,6 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use((req: Request, res: Response, next: Function) => {
 
-    // res.setHeader('Access-Control-Allow-Origin','https://www.eduwall.in')
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Request-With, Content-Type, Accept, Authorization')
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,PUT,DELETE,OPTIONS')
