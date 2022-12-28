@@ -1,5 +1,6 @@
 FE/node_modules
 BE/node_modules
 FE/package-lock.json
+FE/src/firebase.ts
 .env
 package-lock.json
