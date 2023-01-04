@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import Card from '../../UI/Card';
 import { Link } from 'react-router-dom';
 import Button from '../../UI/Button';
@@ -6,8 +6,7 @@ import { motion } from 'framer-motion';
 import useFetch from '../hooks/useFetch';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AlbumIcon from '@mui/icons-material/Album';
-import SnackbarExtended from '../../UI/SnackbarExtended';
-import getMessage from '../common/getMessage';
+
 
 type WatchlistType = {
     imdbId: string,

@@ -87,17 +87,17 @@ const Home: React.FC<{movies:boolean}> = (props) => {
         }
     }, [addToWatchlistIsLoading, watchListData])
 
-    // useEffect(() => {
-    //     let interval: NodeJS.Timer;
+    useEffect(() => {
+        let interval: NodeJS.Timer;
 
-    //     if (!play) {
-    //         interval = setInterval(() => {
-    //             setCount(p => (p + 1) % 5)
-    //         }, 5000);
-    //     }
+        if (!play) {
+            interval = setInterval(() => {
+                setCount(p => (p + 1) % 5)
+            }, 5000);
+        }
 
-    //     return () => clearInterval(interval);
-    // }, [play]);
+        return () => clearInterval(interval);
+    }, [play]);
   
 
     useEffect(() => {
@@ -131,19 +131,19 @@ const Home: React.FC<{movies:boolean}> = (props) => {
 
     
     
-    useEffect(()=>{
+    // useEffect(()=>{
         
-        if(count===6){
-            setTimeout(()=>setCount(1),500)
-        }
+    //     if(count===6){
+    //         setTimeout(()=>setCount(1),500)
+    //     }
 
-        if(count===0){
-            setTimeout(()=>setCount(5),500)
-        }
+    //     if(count===0){
+    //         setTimeout(()=>setCount(5),500)
+    //     }
 
-        return () => {prevCount.current = count}
+    //     return () => {prevCount.current = count}
 
-    },[count])
+    // },[count])
 
     const [message, severity] = getMessage(watchListData)
 
@@ -275,17 +275,17 @@ const Home: React.FC<{movies:boolean}> = (props) => {
 
             <div className='flex flex-col p-2'>
                 <p className='py-3 text-5xl font-bold'>Action & Drama</p>
-                {isLoading ? <div className='flex justify-center'><CircularProgress /></div> : <CardListLazy category={movies?'action':'drama'} movies={movies}/>}
+                {isLoading ? <div className='flex justify-center'><CircularProgress color='primary'/></div> : <CardListLazy category={movies?'action':'drama'} movies={movies}/>}
             </div>
 
             <div className='flex flex-col p-2'>
                 <p className='py-3 text-5xl font-bold'>Popular animated {movies?'films':'shows'}</p>
-                {isLoading ? <div className='flex justify-center'><CircularProgress /></div> : <CardListLazy category={movies?'animated':'cartoon'} movies={movies} />}
+                {isLoading ? <div className='flex justify-center'><CircularProgress color='primary'/></div> : <CardListLazy category={movies?'animated':'cartoon'} movies={movies} />}
             </div>
 
             <div className='flex flex-col p-2'>
                 <p className='py-3 text-5xl font-bold'>{movies?"Watch with friends":"World of Comedy"}</p>
-                {isLoading ? <div className='flex justify-center'><CircularProgress /></div> : <CardListLazy category={movies?'friends':'comedy'} movies={movies} />}
+                {isLoading ? <div className='flex justify-center'><CircularProgress color='primary'/></div> : <CardListLazy category={movies?'friends':'comedy'} movies={movies} />}
             </div>
 
 

@@ -54,7 +54,7 @@ const Watchlist:React.FC = () => {
                    
             <p className='self-start p-3 text-5xl font-bold'>My Watchlist</p>
             
-            {watchlistIsLoading && <div className='flex justify-center h-full'><CircularProgress /></div>}
+            {watchlistIsLoading && <div className='flex justify-center h-full'><CircularProgress color='primary'/></div>}
             {watchListError && <p>Error</p>}
             {watchListData && watchlist?.map((item:any) => {
                 return (

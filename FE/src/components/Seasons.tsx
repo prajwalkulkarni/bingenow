@@ -26,7 +26,7 @@ const Seasons:React.FC<{title:string|undefined,imdbID:string,season:number,tmdbI
     
         return (
             <div className="w-full h-full">
-                {status==='loading' && <div className='flex justify-center py-2'><CircularProgress/></div>}
+                {status==='loading' && <div className='flex justify-center py-2'><CircularProgress color="primary"/></div>}
                 {
                     data && data.map((episode:EpisodeType)=>{
                         return <Episode 

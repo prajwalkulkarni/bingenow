@@ -1,6 +1,6 @@
-import React, { ChangeEvent, useEffect, useState, useRef } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useQuery } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useDebounce } from '../hooks/useDebounce';
 const Search = () => {
@@ -54,7 +54,7 @@ const Search = () => {
             
             {isError && <p>Error</p>}
             <div className='absolute z-10 w-full bg-white rounded-b-md'>
-                {isLoading && <div className='flex justify-center py-2 text-violet-800'><CircularProgress/></div>}
+                {isLoading && <div className='flex justify-center py-2 text-violet-800'><CircularProgress color='primary'/></div>}
                 {data?.map((item: any, key: number) => (
                     <Link to={`/${item['Type']}/${item['imdbID']}`} key={item.imdbID} onClick={()=>setSearch('')}>
                         <div className={`flex p-1 ${key === data.length - 1 ? '' : 'border-b'} border-gray-300`}>
