@@ -87,7 +87,7 @@ const Landing: React.FC = () => {
                                     }}
                                     className='flex justify-center md:justify-end'>
 
-                                    <img src={require('../assets/cover/card1.jpg')} className='w-full md:w-4/5'/>
+                                    <img src={require('../assets/cover/card1.png')} className='w-full md:w-4/5'/>
                                 </motion.div>
                             </motion.div>
                         
@@ -117,7 +117,7 @@ const Landing: React.FC = () => {
                                     hidden: { x: -800 }
                                 }}
                                 className='flex justify-center md:justify-start'>
-                                <img src={require('../assets/cover/tvframe.jpg')} className='w-full md:w-4/5'/>
+                                <img src={require('../assets/cover/card2.png')} className='w-full md:w-4/5' style={{objectFit:'contain',width:300}}/>
                             </motion.div>
 
 
@@ -173,7 +173,7 @@ const Landing: React.FC = () => {
                         <p className='text-4xl font-semibold'>Watch on Any Device</p>
                         <p className='text-xl'>Bingenow works well on all sizes of devices. Enjoy your content on both large displays and small devices, such as smartphones.</p>
 
-                        <img src={require('../assets/cover/card3.jpg')} className='object-contain' />
+                        <img src={require('../assets/cover/card3.png')} className='object-contain' style={{width:600}} />
                     </motion.div>
 
                 </Card>

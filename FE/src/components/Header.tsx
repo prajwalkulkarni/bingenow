@@ -28,7 +28,7 @@ const Header: React.FC<{}> = (props) => {
             <div className="w-full">
                 <div className="flex justify-between w-full p-4 bg-gray-100">
 
-                    <p className="hidden md:inline">Logo</p>
+                    <img src={require('../assets/bingenow.png')} alt="Bingenow logo" style={{objectFit:'contain'}} width="150"/>
 
                     <div className="flex items-center px-2 md:hidden">
                         <button className="outline-none mobile-menu-button" onClick={()=>setToggleMobileMenu(prev=>!prev)}>
