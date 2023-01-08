@@ -1,6 +1,7 @@
 import React, { Fragment, useContext } from "react"
 import Landing from "./pages/Landing"
 import Header from "./components/Header"
+import Footer from "./components/Footer"
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
@@ -45,6 +46,7 @@ const App: React.FC = () => {
                 <BrowserRouter>
                     <Header />
                     {routes}
+                    <Footer />
                 </BrowserRouter>
             </QueryClientProvider>
         </Fragment>
