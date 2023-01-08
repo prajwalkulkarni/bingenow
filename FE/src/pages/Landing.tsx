@@ -36,13 +36,6 @@ const Landing: React.FC = () => {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true, amount: 0.5 }}
-                        // transition={{ duration: 0.5 }}
-                        // variants={{
-                        //     visible: { opacity: 1, scale: 1 },
-                        //     hidden: { opacity: 0, scale: 0 }
-                        //   }}
-
-
                         >
                             <motion.div
                                 variants={{
@@ -93,7 +86,6 @@ const Landing: React.FC = () => {
                         
                     </div>
                 </Card>
-                {/* <p>Bingenow is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices. You can watch as much as you want, whenever you want without a single commercial – all for one low monthly price. There's always something new to discover and new TV shows and movies are added every week!</p> */}
 
             </section>
             <section>
