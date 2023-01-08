@@ -10,6 +10,7 @@ import Home from "./pages/Home"
 import Movie from "./pages/Movie"
 import Context from "./context/Context"
 import Watchlist from "./pages/Watchlist"
+import Contact from "./pages/Contact"
 const queryClient = new QueryClient()
 let routes;
 const App: React.FC = () => {
@@ -25,6 +26,7 @@ const App: React.FC = () => {
                 <Route path="/mywatchlist" element={<Watchlist/>} />
                 <Route path="*" element={<Navigate to='/' replace/>} />
                 <Route path='/shows' element={<Home movies={false} />} />
+                <Route path='/contact' element={<Contact/>} />
             </Routes>
         
         )
@@ -35,6 +37,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<Landing />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path='/contact' element={<Contact/>} />
                 <Route path="*" element={<Navigate to='/' replace/>} />
             </Routes>
         )
