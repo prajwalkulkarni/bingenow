@@ -5,5 +5,8 @@ module.exports = {
     root: true,
     env: {
         node: true
+    },
+    rules: {
+        '@typescript-eslint/no-var-requires': 0,
     }
   };
