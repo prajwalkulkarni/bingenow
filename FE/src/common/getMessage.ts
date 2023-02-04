@@ -1,5 +1,5 @@
 function getMessage(responsedata:any):[string,"success"|"error"|"info"|"warning"]{
-       if(!!responsedata){
+       if(responsedata){
          
         if(Object.keys(responsedata).includes('errors')){
             return [responsedata.errors[0].message,"info"]
