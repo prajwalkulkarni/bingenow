@@ -10,7 +10,7 @@ const useFetch = (options: RequestInit = {}, queryType:string) => {
 
     if(queryType==='query'){
         const { data, isLoading, error } = useQuery('fetch', submitHandler)
-        return { isLoading, error, data,mutate:():any=>{} }
+        return { isLoading, error, data }
     }
     else{
         

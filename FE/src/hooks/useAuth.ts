@@ -2,10 +2,10 @@ import React,{useCallback} from 'react';
 
 
 
-const useAuth = (conditionCB:Function) => {
+const useAuth = (conditionCB:(val:string)=>boolean) => {
 
     const [val, setVal] = React.useState('');
-    const [focus, setFocus] = React.useState(false);
+    const [ , setFocus] = React.useState(false);
     const [isBlurred, setIsBlurred] = React.useState(false);
     
     const isValid = conditionCB(val);

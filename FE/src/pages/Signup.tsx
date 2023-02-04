@@ -1,11 +1,10 @@
-import React,{useContext, useEffect} from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React,{ useEffect} from 'react'
+import { Link } from 'react-router-dom'
 import { emailRegEx } from '../CONSTANTS'
 import { app } from '../firebase'
-import Context from '../context/Context'
 import useAuth from '../hooks/useAuth'
 import { useMutation } from 'react-query'
-import { motion, useUnmountEffect } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Feature from '../components/Feature'
 import {
     getAuth, createUserWithEmailAndPassword,
@@ -15,13 +14,12 @@ import Button from '../../UI/Button'
 import useFetch from '../hooks/useFetch'
 import SocialLogin from '../common/SocialLogin'
 import SnackbarExtended from '../../UI/SnackbarExtended'
+import ErrorPage from '../components/ErrorPage'
 
 
-const Signup: React.FC<{}> = () => {
+const Signup: React.FC<Record<string,never>> = () => {
     const auth = getAuth(app);
-
-    const ctx = useContext(Context)
-    const navigate = useNavigate()
+    
 
     const { val: password, isInvalid, isValid, onBlurHandler, onFocusHandler, onChangeHandler } = useAuth((val: string) => val.length >= 8)
     const { val: email, isInvalid: emailIsInvalid, isValid: emailIsValid, onBlurHandler: emailOnBlurHandler,
@@ -39,7 +37,7 @@ const Signup: React.FC<{}> = () => {
         severity: 'success'
     })
 
-    const {isLoading:dbIsLoading, error:dbError, data:dbData, mutate:dbMutate} = useFetch({
+    const {error:dbError, data:dbData, mutate:dbMutate} = useFetch({
         method:'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -66,7 +64,7 @@ const Signup: React.FC<{}> = () => {
                 await updateProfile(userCredential.user, { displayName: name })
                 await sendEmailVerification(userCredential.user)
     
-                await dbMutate()
+                await dbMutate!()
                 return userCredential
             }
         }
@@ -93,7 +91,9 @@ const Signup: React.FC<{}> = () => {
     }, [data])
     // const { isLoading: socialLoginLoading, error: socialLoginError, data: socialLoginData } = useMutation(socialLogin)
 
-    console.log(data,error)
+    if(error || dbError){
+        return <ErrorPage/>
+    }
     return (
         <Feature image='cover'>
             <div className='flex items-center justify-center min-h-[80vh]'>

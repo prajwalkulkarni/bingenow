@@ -3,9 +3,7 @@ import {createRoot} from 'react-dom/client'
 import App from './App'
 import './index.css'
 import { ContextProvider } from './context/Context';
-
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { purple } from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {

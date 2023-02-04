@@ -12,9 +12,10 @@ import Feature from '../components/Feature'
 import Context from '../context/Context'
 import SocialLogin from '../common/SocialLogin'
 import SnackbarExtended from '../../UI/SnackbarExtended'
+import ErrorPage from '../components/ErrorPage'
 
 
-const Login: React.FC<{}> = () => {
+const Login: React.FC<Record<string,never>> = () => {
 
     const ctx = useContext(Context)
     const navigate = useNavigate()
@@ -27,7 +28,7 @@ const Login: React.FC<{}> = () => {
     const formIsValid = isValid && emailIsValid
 
 
-    const {isLoading:dbIsLoading, error:dbError, data:dbData, mutate:dbMutate} = useFetch({
+    const {error:dbError, data:dbData, mutate:dbMutate} = useFetch({
         method:'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -49,8 +50,8 @@ const Login: React.FC<{}> = () => {
     useEffect(()=>{
         if(dbData){
             console.log(dbData)
-            ctx.setAuth(true)
-            ctx.setUsername(dbData.user?.displayName)
+            ctx?.setAuth(true)
+            ctx?.setUsername(dbData.user?.displayName)
             localStorage.setItem('userId', JSON.stringify((dbData as any).data.createOrGetUser.id))
         
             localStorage.setItem('auth', JSON.stringify(true))
@@ -77,7 +78,7 @@ const Login: React.FC<{}> = () => {
 
                 if(userCredential.user.emailVerified){
                     
-                    dbMutate()
+                    dbMutate!()
                     
                     return userCredential
                 }else{
@@ -86,11 +87,11 @@ const Login: React.FC<{}> = () => {
             }
         }
         catch (error: any) {
-            const errorCode = error.code;
+            
             const errorMessage = error.message;
             setOpen(true)
-            ctx.setAuth(false)
-            ctx.setUsername(null)
+            ctx?.setAuth(false)
+            ctx?.setUsername(null)
             return errorMessage
         }
     }
@@ -98,6 +99,10 @@ const Login: React.FC<{}> = () => {
     const { isLoading, error, data, mutate } = useMutation(loginHandler, {
         mutationKey: 'login',
     })
+
+    if(error || dbError){
+        return <ErrorPage/>
+    }
 
     return (
         <Feature image='cover'>

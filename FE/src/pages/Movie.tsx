@@ -7,7 +7,7 @@ import { useQuery } from 'react-query';
 import Seasons from '../components/Seasons';
 import Feature from '../components/Feature';
 import MediaPortal from '../components/MediaPortal';
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import useFetch from '../hooks/useFetch';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -17,6 +17,8 @@ import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import SnackbarExtended from '../../UI/SnackbarExtended';
 import getMessage from '../common/getMessage'
+import Error from '../components/ErrorPage';
+import { ContentSeparator, SkeletalPlaceholder } from '../common/CommonComponents';
 type MediaDetailsType = {
     title: string,
     year: string,
@@ -32,7 +34,7 @@ type MediaDetailsType = {
     tmdbID: string,
 }
 
-const Movie: React.FC<{}> = (props) => {
+const Movie: React.FC<Record<string,never>> = () => {
 
     const route = useParams()
 
@@ -62,7 +64,7 @@ const Movie: React.FC<{}> = (props) => {
     }, []);
 
 
-    const { data, status, isLoading, error } = useQuery([imdbID!], async () => {
+    const { data, error } = useQuery([imdbID!], async () => {
 
         const backdrop = await fetch(`https://api.themoviedb.org/3/find/${imdbID}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&external_source=imdb_id`)
         const backdrop_json = await backdrop.json()
@@ -155,6 +157,11 @@ const Movie: React.FC<{}> = (props) => {
     }, [addToWatchlistIsLoading, watchListData])
 
 
+    if (error || watchListError) {
+
+        return <Error/>
+    }
+    
     return (
         <main>
             <section>
@@ -166,7 +173,7 @@ const Movie: React.FC<{}> = (props) => {
                     <div className='flex'>
                         <div className='flex flex-col p-6 md:w-1/2'>
                             <SnackbarExtended open={open} message={toast.message} severity={toast.severity} handleClose={handleClose} />
-                            {data ? <p className='text-5xl font-bold text-white'>{data.title}</p> : <div className='w-full h-6 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
+                            {data ? <p className='text-5xl font-bold text-white'>{data.title}</p> : <SkeletalPlaceholder height={6}/>}
                             <div className='flex flex-col py-3 md:flex-row md:items-center'>
                                 {mediaType === 'series' && <FormControl sx={{ minWidth: 120 }} size="small"
                                     className='text-white border-none h-fit w-fit bg-violet-800 hover:border-none hover:text-white'>
@@ -195,13 +202,13 @@ const Movie: React.FC<{}> = (props) => {
                                 </FormControl>}
                                 {data ? <div className='flex flex-col md:flex-row'>
                                     <p className='flex items-center text-lg font-semibold text-white sm:px-1'><AccessTimeIcon /> &nbsp;- {data.runtime}</p>
-                                    <p className='hidden text-lg font-semibold text-white md:flex sm:px-1 md:px-1'>|</p>
+                                    <ContentSeparator/>
                                     <p className='flex items-center text-lg font-semibold text-white sm:px-1'><StarOutlineIcon/> &nbsp;- IMdb {data.imdbRating}</p>
-                                    <p className='hidden px-1 text-lg font-semibold text-white md:flex md: sm:px-1'>|</p>
-                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><CalendarMonthIcon/> &nbsp;- {data.year}</p></div> : <div className='w-full h-4 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
+                                    <ContentSeparator/>
+                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><CalendarMonthIcon/> &nbsp;- {data.year}</p></div> : <SkeletalPlaceholder height={4}/>}
 
                             </div>
-                            {data ? <p className='p-1 text-lg text-white'>{data.plot}</p> : <div className='w-full h-8 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>}
+                            {data ? <p className='p-1 text-lg text-white'>{data.plot}</p> : <SkeletalPlaceholder height={8}/>}
 
                             <div className='flex flex-col justify-center mt-4'>
                                 {
@@ -213,7 +220,7 @@ const Movie: React.FC<{}> = (props) => {
                                             
 
                                         </> :
-                                        <div className='w-full h-8 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>
+                                        <SkeletalPlaceholder height={8}/>
                                 }
                                 {mediaType === 'movie' && <div className='flex'>
                                     {
@@ -232,7 +239,7 @@ const Movie: React.FC<{}> = (props) => {
                                                         className='w-6 h-6 border-t-2 border-l-2 border-white rounded-xl'></motion.div> : 'Add to watchlist'}
                                             </Button>
                                         </> :
-                                            <div className='w-full h-8 text-lg font-bold text-white bg-gray-600 animate-pulse'></div>
+                                            <SkeletalPlaceholder height={8}/>
                                     }
                                 </div>}
                             </div>

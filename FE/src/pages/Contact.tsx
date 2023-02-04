@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Contact: React.FC<{}> = (props) => {
+const Contact: React.FC<Record<string, never>> = () => {
     return (
         <section>
             <div

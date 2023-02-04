@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, ReducerWithoutAction, useReducer } from 'react'
+import React, { PropsWithChildren, useReducer } from 'react'
 
 type ContextType = {
     auth: boolean,
@@ -25,12 +25,7 @@ const initialState = {
     auth: false,
     username: null,
 }
-const Context = React.createContext<ContextType>({
-    auth: false,
-    username: null,
-    setAuth: () => {},
-    setUsername: () => {},
-})
+const Context = React.createContext<ContextType|null>(null)
 
 
 function reducer(state:{auth:boolean,username:string|null},action:ActionType){

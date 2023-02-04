@@ -17,7 +17,7 @@ const App: React.FC = () => {
 
     const ctx = useContext(Context)
 
-    if(JSON.parse(localStorage.getItem('auth') as string) || ctx.auth) {
+    if(JSON.parse(localStorage.getItem('auth') as string) || ctx?.auth) {
         routes = (
             
             <Routes>
