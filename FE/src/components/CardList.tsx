@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery } from 'react-query'
-import { getDocs, collection, getFirestore } from 'firebase/firestore'
+import { getDocs, collection, getFirestore, DocumentData } from 'firebase/firestore'
 import { app } from '../firebase'
 import CardItem from './CardItem'
 const db = getFirestore(app)
@@ -9,7 +9,7 @@ const db = getFirestore(app)
 
 const CardList: React.FC<{ category: string, movies: boolean }> = (props) => {
 
-    const { data, isLoading, isError } = useQuery(props.category, async () => {
+    const { data } = useQuery(props.category, async () => {
         const querySnapshot = await getDocs(collection(db, props.category));
         const data = querySnapshot.docs.map((doc) => doc.data());
 
@@ -19,7 +19,7 @@ const CardList: React.FC<{ category: string, movies: boolean }> = (props) => {
     
     return (
         <div className='flex flex-no-wrap w-full overflow-x-scroll no-scrollbar'>
-            {data?.map((item: any) => {
+            {data?.map((item: DocumentData) => {
                 
               
                 return (

@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const Footer: React.FC = (props) => {
+const Footer: React.FC = () => {
 
     return (
         <footer className="flex flex-col w-full mt-12 bg-gray-100">
@@ -11,9 +12,9 @@ const Footer: React.FC = (props) => {
            
                 <div className="flex flex-col m-2">
                     <h3 className="text-xl font-bold">Bingenow</h3>
-                    <a href="" className="text-gray-500">Contact</a>
-                    <a href="" className="text-gray-500">Privacy Policy</a>
-                    <a href="https://github.com/prajwalkulkarni/bingenow/blob/main/CONTRIBUTING.md" target="_blank" className="text-gray-500">Contribute</a>
+                    <Link to='/contact' className="text-gray-500 underline">Contact</Link>
+                    <Link to="" className="text-gray-500 underline">Privacy Policy</Link>
+                    <a target="_blank" href="https://github.com/prajwalkulkarni/bingenow/blob/main/CONTRIBUTING.md" className="text-gray-500 underline">Contribute</a>
                 </div>
                 
             

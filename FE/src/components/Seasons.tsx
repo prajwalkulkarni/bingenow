@@ -23,6 +23,14 @@ const Seasons:React.FC<{title:string|undefined,imdbID:string,season:number,tmdbI
     }
     )
 
+    if(error){
+        return <div className="flex flex-col items-center w-full h-full">
+
+            <img src={require('../assets/error.png')} alt="Error"/>
+            <p className="text-2xl text-gray-500">Something went wrong</p>
+        </div>
+    }
+
     
         return (
             <div className="w-full h-full">

@@ -13,7 +13,7 @@ type CardItemProps = {
 import { Link } from "react-router-dom"
 const CardItem: React.FC<CardItemProps> = (props) => {
 
-    const { title, year, runtime, poster, imdbID, movie } = props
+    const { title, year, poster, imdbID, movie } = props
 
     return (
         <Card className="flex-shrink-0 mx-2 basis-1/2 sm:basis-2/5 md:basis-1/5">

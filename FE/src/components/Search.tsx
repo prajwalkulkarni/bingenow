@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import { useQuery } from 'react-query';
+import React, { ChangeEvent, useState } from 'react'
+import { useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useDebounce } from '../hooks/useDebounce';
@@ -11,15 +11,15 @@ const Search = () => {
     
     const debouncedValue = useDebounce(search, search===''?100:500)
 
+    const queryClient = useQueryClient()
    
 
-    useEffect(() => {
-        if(debouncedValue){
-            console.log('searching')
-            refetch()
+    // useEffect(() => {
+    //     if(debouncedValue){
+    //         refetch()
         
-        }
-    }, [debouncedValue])
+    //     }
+    // }, [debouncedValue])
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value)
 
@@ -47,6 +47,12 @@ const Search = () => {
 
     })
 
+    const resetSearch = () => {
+        setSearch('')
+        queryClient.cancelQueries('')
+        queryClient.cancelQueries(debouncedValue)
+    }
+
     
     return (
         <div className='relative w-full md:w-1/2 lg:w-1/4'>
@@ -54,9 +60,9 @@ const Search = () => {
             
             {isError && <p>Error</p>}
             <div className='absolute z-10 w-full bg-white rounded-b-md'>
-                {isLoading && <div className='flex justify-center py-2 text-violet-800'><CircularProgress color='primary'/></div>}
+                {status === 'loading' && <div className='flex justify-center py-2 text-violet-800'><CircularProgress color='primary'/></div>}
                 {data?.map((item: any, key: number) => (
-                    <Link to={`/${item['Type']}/${item['imdbID']}`} key={item.imdbID} onClick={()=>setSearch('')}>
+                    <Link to={`/${item['Type']}/${item['imdbID']}`} key={item.imdbID} onClick={resetSearch}>
                         <div className={`flex p-1 ${key === data.length - 1 ? '' : 'border-b'} border-gray-300`}>
                             
                             <div className='hidden h-14 lg:flex'>
