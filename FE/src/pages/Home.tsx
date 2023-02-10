@@ -20,6 +20,7 @@ import getMessage from '../common/getMessage';
 import { useNavigate } from 'react-router-dom';
 import { ContentSeparator, SkeletalPlaceholder } from '../common/CommonComponents';
 import moment from 'moment';
+import { getHumanizedTimeFromMinutes } from '../utils/commonFunctions';
 const db = getFirestore(app);
 
 
@@ -248,7 +249,7 @@ const CarouselSlides = (props: CarouselSlidesType) => {
                                         <ContentSeparator/>
                                         <p className='flex items-center px-1 text-lg font-semibold text-white'><CalendarMonthIcon /> &nbsp;- {media_data_carousel.year}</p>
                                         <ContentSeparator/>
-                                        <p className='flex items-center px-1 text-lg font-semibold text-white'><AccessTimeIcon /> &nbsp;- {moment.duration(parseInt(media_data_carousel.runtime), "minutes").humanize()}</p>
+                                        <p className='flex items-center px-1 text-lg font-semibold text-white'><AccessTimeIcon /> &nbsp;- {getHumanizedTimeFromMinutes(parseInt(media_data_carousel.runtime))}</p>
                                     </div>
 
                                     <div className='flex-col justify-between md:flex md:w-fit md:flex-row md:justify-start'>

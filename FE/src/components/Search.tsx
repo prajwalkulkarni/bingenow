@@ -13,17 +13,8 @@ const Search = () => {
 
     const queryClient = useQueryClient()
    
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)
 
-    // useEffect(() => {
-    //     if(debouncedValue){
-    //         refetch()
-        
-    //     }
-    // }, [debouncedValue])
-    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value)
-
-    }
     
     const { data, status,isLoading, isError, refetch } = useQuery(debouncedValue, async () => {
 
@@ -56,11 +47,11 @@ const Search = () => {
     
     return (
         <div className='relative w-full md:w-1/2 lg:w-1/4'>
-            <input type='text' className='w-full p-2 rounded-md' value={search} onChange={handleSearch} placeholder='Search' />
+            <input type='text' className='w-full p-2 rounded-md' value={search} onChange={handleSearch} placeholder='Search (enter min. 4 characters)' />
             
             {isError && <p>Error</p>}
             <div className='absolute z-10 w-full bg-white rounded-b-md'>
-                {status === 'loading' && <div className='flex justify-center py-2 text-violet-800'><CircularProgress color='primary'/></div>}
+                {isLoading && !!search && <div className='flex justify-center py-2 text-violet-800'><CircularProgress color='primary'/></div>}
                 {data?.map((item: any, key: number) => (
                     <Link to={`/${item['Type']}/${item['imdbID']}`} key={item.imdbID} onClick={resetSearch}>
                         <div className={`flex p-1 ${key === data.length - 1 ? '' : 'border-b'} border-gray-300`}>

@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import useFetch from '../hooks/useFetch';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AlbumIcon from '@mui/icons-material/Album';
-
+import { getHumanizedTimeFromMinutes } from '../utils/commonFunctions';
 
 type WatchlistType = {
     imdbId: string,
@@ -70,7 +70,7 @@ const Watchlistitem: React.FC<WatchlistType> = (props) => {
                     <p className="text-3xl font-bold">{title}</p>
                     <p className="text-sm">{year}</p>
                     <p className="text-md"><AlbumIcon /> &nbsp;- {genre}</p>
-                    <p className="text-md"><AccessTimeIcon /> &nbsp;- {runtime}</p>
+                    <p className="text-md"><AccessTimeIcon /> &nbsp;- {getHumanizedTimeFromMinutes(parseInt(runtime))}</p>
 
                     <p className="text-sm">{plot}</p>
 

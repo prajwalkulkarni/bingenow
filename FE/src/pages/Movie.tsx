@@ -19,6 +19,7 @@ import SnackbarExtended from '../../UI/SnackbarExtended';
 import getMessage from '../common/getMessage'
 import Error from '../components/ErrorPage';
 import { ContentSeparator, SkeletalPlaceholder } from '../common/CommonComponents';
+import { getHumanizedTimeFromMinutes } from '../utils/commonFunctions';
 type MediaDetailsType = {
     title: string,
     year: string,
@@ -201,7 +202,7 @@ const Movie: React.FC<Record<string,never>> = () => {
                                     </Select>
                                 </FormControl>}
                                 {data ? <div className='flex flex-col md:flex-row'>
-                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><AccessTimeIcon /> &nbsp;- {data.runtime}</p>
+                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><AccessTimeIcon /> &nbsp;- {getHumanizedTimeFromMinutes(parseInt(data.runtime))}</p>
                                     <ContentSeparator/>
                                     <p className='flex items-center text-lg font-semibold text-white sm:px-1'><StarOutlineIcon/> &nbsp;- IMdb {data.imdbRating}</p>
                                     <ContentSeparator/>
@@ -222,10 +223,10 @@ const Movie: React.FC<Record<string,never>> = () => {
                                         </> :
                                         <SkeletalPlaceholder height={8}/>
                                 }
-                                {mediaType === 'movie' && <div className='flex'>
+                               <div className='flex'>
                                     {
                                         data ? <>
-                                            <Button className='mx-1' onClick={() => setPlay(true)}><PlayCircleOutlineIcon />Watch</Button>
+                                            {mediaType === 'movie' && <Button className='mx-1' onClick={() => setPlay(true)}><PlayCircleOutlineIcon />Watch</Button>}
                                             <Button
                                                 className='mx-1' onClick={watchlistMutate}>
                                                 {addToWatchlistIsLoading ?
@@ -241,7 +242,7 @@ const Movie: React.FC<Record<string,never>> = () => {
                                         </> :
                                             <SkeletalPlaceholder height={8}/>
                                     }
-                                </div>}
+                                </div>
                             </div>
                         </div>
                     </div>
