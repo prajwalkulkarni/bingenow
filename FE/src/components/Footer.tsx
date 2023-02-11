@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
                 <div className="flex flex-col m-2">
                     <h3 className="text-xl font-bold">Bingenow</h3>
                     <Link to='/contact' className="text-gray-500 underline">Contact</Link>
-                    <Link to="" className="text-gray-500 underline">Privacy Policy</Link>
+                    <Link to="/privacypolicy" className="text-gray-500 underline">Privacy Policy</Link>
                     <a target="_blank" href="https://github.com/prajwalkulkarni/bingenow/blob/main/CONTRIBUTING.md" className="text-gray-500 underline">Contribute</a>
                 </div>
                 
@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
 
             <div className='flex flex-col'>
                 <hr/>
-                <p className="flex items-center justify-center p-2 text-gray-500">Made with <span className="text-red-500">❤</span> by <a href="">Bingenow</a></p>
+                <p className="flex items-center justify-center p-2 text-gray-500">Made with <span className="text-red-500">❤</span> by &nbsp;<a href="https://prajwalkulkarni.github.io">Prajwal</a></p>
             </div>
         </footer>
     )

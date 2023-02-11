@@ -51,7 +51,7 @@ const Home: React.FC<{ movies: boolean }> = (props) => {
 
                 <div
 
-                    className='flex relative overflow-hidden flex-col justify-center items-center min-h-[30vh] md:min-h-[60vh]'
+                    className='flex relative overflow-hidden flex-col justify-center items-center min-h-[30vh] sm:min-h-[50vh] md:min-h-[60vh]'
                 >
                     
                         <CarouselSlides
@@ -242,9 +242,9 @@ const CarouselSlides = (props: CarouselSlidesType) => {
                             <div className='flex'>
                                 <div className='flex flex-col p-6 md:w-4/5'>
                                     <p className='text-3xl font-bold text-white md:text-5xl'>{media_data_carousel.title}</p>
-                                    <p className='hidden p-1 text-lg text-white md:block'>{media_data_carousel.plot}</p>
+                                    <p className='hidden p-1 text-lg text-white lg:block'>{media_data_carousel.plot}</p>
 
-                                    <div className='flex-col justify-start hidden mt-4 sm:flex md:items-start lg:flex-row'>
+                                    <div className='flex-col justify-start hidden mt-4 md:flex md:items-start lg:flex-row'>
                                         <p className='flex items-center px-1 text-lg font-semibold text-white'><AlbumIcon /> &nbsp;- {media_data_carousel.genre}</p>
                                         <ContentSeparator/>
                                         <p className='flex items-center px-1 text-lg font-semibold text-white'><CalendarMonthIcon /> &nbsp;- {media_data_carousel.year}</p>

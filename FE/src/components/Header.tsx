@@ -16,7 +16,7 @@ import TheaterComedyIcon from '@mui/icons-material/TheaterComedy';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-const drawerData = [{title:'Movies', icon:<MovieIcon />, link:'/'}, {title:'Series', icon:<TheaterComedyIcon />, link:'/shows'}, {title:'Watchlist', icon:<FormatListNumberedIcon />, link:'/mywatchlist'}];
+const drawerData = [{ title: 'Movies', icon: <MovieIcon />, link: '/' }, { title: 'Series', icon: <TheaterComedyIcon />, link: '/shows' }, { title: 'Watchlist', icon: <FormatListNumberedIcon />, link: '/mywatchlist' }];
 const Header: React.FC<Record<string, never>> = () => {
 
     const ctx = useContext(Context)
@@ -61,12 +61,12 @@ const Header: React.FC<Record<string, never>> = () => {
                     <ListItem key={drawerItem.title} disablePadding>
                         <ListItemButton>
                             <Link to={drawerItem.link as string}>
-                            <ListItemIcon>
-                                {drawerItem.icon}
-                            </ListItemIcon>
+                                <ListItemIcon>
+                                    {drawerItem.icon}
+                                </ListItemIcon>
                             </Link>
                             <Link to={drawerItem.link as string}>
-                            <ListItemText primary={drawerItem.title} />
+                                <ListItemText primary={drawerItem.title} />
                             </Link>
                         </ListItemButton>
                     </ListItem>
@@ -89,28 +89,28 @@ const Header: React.FC<Record<string, never>> = () => {
 
         <nav className="bg-white shadow-lg">
             <div className="w-full">
-                <div className="flex justify-between w-full p-4 bg-gray-100">
+                <div className={`flex ${ctx?.auth ? 'justify-between':'justify-end'} w-full p-4 bg-gray-100`}>
 
                     <Link to='/' className={`hidden lg:flex`}>
                         <img src={require('../assets/bingenow.png')} alt="Bingenow logo" style={{ objectFit: 'contain' }} width="150" />
                     </Link>
 
-                    <div className="flex items-center px-2 lg:hidden">
-                        <button className="outline-none mobile-menu-button" onClick={toggleDrawerFn(true)}>
-                            <svg className="w-6 h-6 text-gray-500 hover:text-purple-800"
-                                x-show="!showMenu"
-                                fill="none"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                        </button>
-                    </div>
                     {ctx?.auth && <>
+                        <div className="flex items-center px-2 lg:hidden">
+                            <button className="outline-none mobile-menu-button" onClick={toggleDrawerFn(true)}>
+                                <svg className="w-6 h-6 text-gray-500 hover:text-purple-800"
+                                    x-show="!showMenu"
+                                    fill="none"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
+                        </div>
                         <Search />
                         <div className="items-center hidden lg:flex text-violet-800">
                             <Link
@@ -127,13 +127,14 @@ const Header: React.FC<Record<string, never>> = () => {
                 </div>
             </div>
 
-            <Drawer
+            {ctx?.auth && <Drawer
                 anchor={'left'}
                 open={toggleDrawer}
                 onClose={toggleDrawerFn(false)}
             >
                 {list()}
             </Drawer>
+            }
         </nav>
     )
 }

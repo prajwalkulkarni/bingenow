@@ -11,12 +11,14 @@ import Movie from "./pages/Movie"
 import Context from "./context/Context"
 import Watchlist from "./pages/Watchlist"
 import Contact from "./pages/Contact"
+import PrivacyPolicy from "./pages/PrivacyPolicy"
 const queryClient = new QueryClient()
 let routes;
 const App: React.FC = () => {
 
     const ctx = useContext(Context)
 
+    
     if(JSON.parse(localStorage.getItem('auth') as string) || ctx?.auth) {
         routes = (
             
@@ -24,9 +26,10 @@ const App: React.FC = () => {
                 <Route path="/" element={<Home movies={true} />} />
                 <Route path="/:mediaType/:imdbID/" element={<Movie/>} />
                 <Route path="/mywatchlist" element={<Watchlist/>} />
+                <Route path='/contact' element={<Contact/>} />
+            <Route path="/privacypolicy" element={<PrivacyPolicy/>} />
                 <Route path="*" element={<Navigate to='/' replace/>} />
                 <Route path='/shows' element={<Home movies={false} />} />
-                <Route path='/contact' element={<Contact/>} />
             </Routes>
         
         )
@@ -38,11 +41,12 @@ const App: React.FC = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path='/contact' element={<Contact/>} />
+            <Route path="/privacypolicy" element={<PrivacyPolicy/>} />
                 <Route path="*" element={<Navigate to='/' replace/>} />
             </Routes>
         )
     }
-    
+
     return (
         <Fragment>
             <QueryClientProvider client={queryClient}>

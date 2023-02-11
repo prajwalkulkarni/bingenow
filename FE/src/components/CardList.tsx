@@ -19,14 +19,10 @@ const CardList: React.FC<{ category: string, movies: boolean }> = (props) => {
     
     return (
         <div className='flex flex-no-wrap w-full overflow-x-scroll no-scrollbar'>
-            {data?.map((item: DocumentData) => {
-                
-              
-                return (
-                    
-                        <CardItem movie={props.movies} key={item['imdbID']}  title={item['Title']} year={item['Year']} runtime={item['Runtime']} poster={item['Poster']} imdbID={item['imdbID']} />
-                )
-            })}
+            {data?.map((item: DocumentData, index: number) => (    
+                <CardItem movie={props.movies} key={index}  title={item['Title']} year={item['Year']} runtime={item['Runtime']} poster={item['Poster']} imdbID={item['imdbID']} />
+            )
+            )}
 
         </div>
     )
