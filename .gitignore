@@ -2,5 +2,6 @@ FE/node_modules
 BE/node_modules
 FE/package-lock.json
 FE/src/firebase.ts
+FE/.vercel
 .env
 package-lock.json
