@@ -374,7 +374,6 @@ const MediaCardsContainer = (props:{movies:boolean, isLoading:boolean}) => {
         </>
     )
 
-
 }
 
 
