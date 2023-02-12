@@ -13,7 +13,7 @@ jobs:
       - name: "Echo values"
         run: |
           echo ${{ secrets.VERCEL_TOKEN }}
-          echo ${{ VERCEL_ORG_ID }}
+          echo ${{ secrets.VERCEL_ORG_ID }}
       - uses: actions/checkout@v2
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
