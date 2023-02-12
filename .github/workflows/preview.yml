@@ -12,9 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Echo values"
-        run: whoami
-             echo 1+1
-             echo ${{secrets.VERCEL_TOKEN}}
+        run: echo 1+1
       - uses: actions/checkout@v2
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
