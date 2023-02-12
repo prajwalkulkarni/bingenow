@@ -4,16 +4,16 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
   push:
-    branches-ignore:
-      - release
+    branches:
+      - main
 jobs:
   Deploy-Preview:
     runs-on: ubuntu-latest
     steps:
       - name: "Echo values"
-        run: |
-          echo ${{ secrets.VERCEL_TOKEN }}
-          echo ${{ VERCEL_ORG_ID }}
+        run: whoami
+             echo 1+1
+             echo ${{secrets.VERCEL_TOKEN}}
       - uses: actions/checkout@v2
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
