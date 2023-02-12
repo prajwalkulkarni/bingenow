@@ -44,7 +44,7 @@ module.exports = {
             publicPath: '/',
         }),
         new MiniCssExtractPlugin(),
-        new DotEnv()
+        new DotEnv({systemvars: true})
     ]
 
 }
