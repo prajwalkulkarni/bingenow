@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react"
+import React, { Fragment, lazy, useContext } from "react"
 import Landing from "./pages/Landing"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
@@ -6,12 +6,14 @@ import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import { QueryClientProvider, QueryClient } from "react-query"
-import Home from "./pages/Home"
-import Movie from "./pages/Movie"
 import Context from "./context/Context"
-import Watchlist from "./pages/Watchlist"
-import Contact from "./pages/Contact"
-import PrivacyPolicy from "./pages/PrivacyPolicy"
+
+const Home = lazy(() => import("./pages/Home"));
+const Movie = lazy(() => import("./pages/Movie"));
+const Watchlist = lazy(() => import("./pages/Watchlist"));
+const Contact = lazy(() => import("./pages/Contact"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+
 const queryClient = new QueryClient()
 let routes;
 const App: React.FC = () => {
