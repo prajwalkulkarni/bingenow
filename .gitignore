@@ -1,6 +1,4 @@
-FE/node_modules
-BE/node_modules
-FE/package-lock.json
-FE/.vercel
-.env
+node_modules
 package-lock.json
+.vercel
+.env
