@@ -1,4 +1,5 @@
 node_modules
 .vercel
 bingenow-fullstack.code-workspace
+.env
 dist
