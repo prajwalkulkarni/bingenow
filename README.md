@@ -4,8 +4,6 @@ Bingenow is an application to stream movies and tv shows for free.
 The streaming happens through a third-party service, so this application would be essentially an interface to consume the media.
 
 
-This is a monorepo that holds the code for both the backend and frontend that serves as a single source of truth and for easier maintanance of the codebase.
-
 ## Techstack
 
 Although the streaming service will be provided through a third party, to enchance the user experience,

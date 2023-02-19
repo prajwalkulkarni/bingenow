@@ -6,9 +6,6 @@ on:
   push:
     branches:
       - release
-defaults:
-  run:
-    working-directory: ./FE
 jobs:
   Deploy-Production:
     runs-on: ubuntu-latest
