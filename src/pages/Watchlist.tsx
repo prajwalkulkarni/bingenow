@@ -1,6 +1,6 @@
 import React,{useEffect, useCallback} from 'react'
 import useFetch from '../hooks/useFetch'
-import CircularProgress from '@mui/material/CircularProgress';
+import Loader from '../../UI/Loader';
 import Watchlistitem from '../components/Watchlistitem'
 import SnackbarExtended from '../../UI/SnackbarExtended';
 
@@ -67,7 +67,7 @@ const Watchlist:React.FC = () => {
     }
 
     if(watchlistIsLoading){
-        return <div className='flex justify-center h-full'><CircularProgress color='primary'/></div>
+        return <Loader text='Loading your watchlist...' />
     }
 
     if(watchListError){

@@ -1,4 +1,4 @@
-import React, { Fragment, lazy, useContext } from "react"
+import React, { Fragment, lazy, Suspense, useContext } from "react"
 import Landing from "./pages/Landing"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
@@ -54,7 +54,9 @@ const App: React.FC = () => {
             <QueryClientProvider client={queryClient}>
                 <BrowserRouter>
                     <Header />
+                    <Suspense fallback={<div>Loading...</div>}>
                     {routes}
+                    </Suspense>
                     <Footer />
                 </BrowserRouter>
             </QueryClientProvider>
