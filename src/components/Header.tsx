@@ -91,7 +91,7 @@ const Header: React.FC<Record<string, never>> = () => {
             <div className="w-full">
                 <div className={`flex justify-between w-full p-4 bg-gray-100`}>
 
-                    <Link to='/'>
+                    <Link to='/' className={`${ctx?.auth && 'hidden'} lg:flex`}>
                         <img src={require('../assets/bingenow.png')} alt="Bingenow logo" style={{ objectFit: 'contain' }} width="150" />
                     </Link>
 

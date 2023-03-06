@@ -11,7 +11,8 @@ type EpisodeType = {
     season_number: number,
     still_path: string,
 }
-const Seasons:React.FC<{title:string|undefined,imdbID:string,season:number,tmdbID:string|undefined}> = (props) => {
+
+const Seasons =  React.forwardRef<HTMLDivElement, {title:string|undefined,imdbID:string,season:number,tmdbID:string|undefined}>((props, ref) => {
     
     const {title,imdbID, season,tmdbID} = props
 
@@ -33,7 +34,7 @@ const Seasons:React.FC<{title:string|undefined,imdbID:string,season:number,tmdbI
 
     
         return (
-            <div className="w-full h-full">
+            <div className="w-full h-full" ref={ref}>
                 {status==='loading' && <div className='flex justify-center py-2'><CircularProgress color="primary"/></div>}
                 {
                     data && data.map((episode:EpisodeType)=>{
@@ -50,6 +51,6 @@ const Seasons:React.FC<{title:string|undefined,imdbID:string,season:number,tmdbI
                 }
             </div>
         )
-    }
+    })
     
 export default Seasons

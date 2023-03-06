@@ -35,10 +35,11 @@ type MediaDetailsType = {
     tmdbID: string,
 }
 
-const Movie: React.FC<Record<string,never>> = () => {
+const Movie: React.FC<Record<string, never>> = () => {
 
     const route = useParams()
 
+    const seasonsRef = React.useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
 
     const [toast, setToast] = useState<{ message: string, severity: "success" | "error" | "info" | "warning" }>({
@@ -53,8 +54,14 @@ const Movie: React.FC<Record<string,never>> = () => {
 
     const changeSeason = (e: SelectChangeEvent<number>) => {
         setSeason(Number(e.target.value))
+
     }
 
+    useEffect(() => {
+        if (seasonsRef.current) {
+            seasonsRef.current.scrollIntoView({ behavior: 'smooth' })
+        }
+    }, [season])
 
     const handleClose = useCallback((event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
@@ -160,9 +167,9 @@ const Movie: React.FC<Record<string,never>> = () => {
 
     if (error || watchListError) {
 
-        return <Error/>
+        return <Error />
     }
-    
+
     return (
         <main>
             <section>
@@ -174,7 +181,7 @@ const Movie: React.FC<Record<string,never>> = () => {
                     <div className='flex'>
                         <div className='flex flex-col p-6 md:w-1/2'>
                             <SnackbarExtended open={open} message={toast.message} severity={toast.severity} handleClose={handleClose} />
-                            {data ? <p className='text-5xl font-bold text-white'>{data.title}</p> : <SkeletalPlaceholder height={6}/>}
+                            {data ? <p className='text-5xl font-bold text-white'>{data.title}</p> : <SkeletalPlaceholder height={6} />}
                             <div className='flex flex-col py-3 md:flex-row md:items-center'>
                                 {mediaType === 'series' && <FormControl sx={{ minWidth: 120 }} size="small"
                                     className='text-white border-none h-fit w-fit bg-violet-800 hover:border-none hover:text-white'>
@@ -203,13 +210,13 @@ const Movie: React.FC<Record<string,never>> = () => {
                                 </FormControl>}
                                 {data ? <div className='flex flex-col md:flex-row'>
                                     <p className='flex items-center text-lg font-semibold text-white sm:px-1'><AccessTimeIcon /> &nbsp;- {getHumanizedTimeFromMinutes(parseInt(data.runtime))}</p>
-                                    <ContentSeparator/>
-                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><StarOutlineIcon/> &nbsp;- IMdb {data.imdbRating}</p>
-                                    <ContentSeparator/>
-                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><CalendarMonthIcon/> &nbsp;- {data.year}</p></div> : <SkeletalPlaceholder height={4}/>}
+                                    <ContentSeparator />
+                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><StarOutlineIcon /> &nbsp;- IMdb {data.imdbRating}</p>
+                                    <ContentSeparator />
+                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><CalendarMonthIcon /> &nbsp;- {data.year}</p></div> : <SkeletalPlaceholder height={4} />}
 
                             </div>
-                            {data ? <p className='p-1 text-lg text-white'>{data.plot}</p> : <SkeletalPlaceholder height={8}/>}
+                            {data ? <p className='p-1 text-lg text-white'>{data.plot}</p> : <SkeletalPlaceholder height={8} />}
 
                             <div className='flex flex-col justify-center mt-4'>
                                 {
@@ -218,12 +225,12 @@ const Movie: React.FC<Record<string,never>> = () => {
                                             <p className='text-lg font-semibold text-white sm:px-1'>Director: {data.director}</p>
                                             <p className='text-lg font-semibold text-white sm:px-1'>Actors: {data.actors}</p>
                                             <p className='text-lg font-semibold text-white sm:px-1'>Genre: {data.genre}</p>
-                                            
+
 
                                         </> :
-                                        <SkeletalPlaceholder height={8}/>
+                                        <SkeletalPlaceholder height={8} />
                                 }
-                               <div className='flex'>
+                                <div className='flex'>
                                     {
                                         data ? <>
                                             {mediaType === 'movie' && <Button className='mx-1' onClick={() => setPlay(true)}><PlayCircleOutlineIcon />Watch</Button>}
@@ -240,7 +247,7 @@ const Movie: React.FC<Record<string,never>> = () => {
                                                         className='w-6 h-6 border-t-2 border-l-2 border-white rounded-xl'></motion.div> : 'Add to watchlist'}
                                             </Button>
                                         </> :
-                                            <SkeletalPlaceholder height={8}/>
+                                            <SkeletalPlaceholder height={8} />
                                     }
                                 </div>
                             </div>
@@ -250,6 +257,7 @@ const Movie: React.FC<Record<string,never>> = () => {
             </section>
             <section>
                 {mediaType === 'series' && data?.tmdbID && <Seasons title={data?.title}
+                    ref={seasonsRef}
                     imdbID={imdbID!}
                     season={season}
                     tmdbID={data?.tmdbID} />}
