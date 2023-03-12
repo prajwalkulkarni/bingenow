@@ -3,7 +3,7 @@ import React from "react"
 
 const Loader = ({ text = "" }: { text: string }) => {
     return (
-        <div className='flex-col items-center justify-center h-full'><CircularProgress color='primary' />
+        <div className='flex flex-col items-center justify-center w-full h-full p-3'><CircularProgress color='primary' />
             <div>{text}</div>
         </div>
     )
