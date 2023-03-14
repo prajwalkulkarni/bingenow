@@ -1,4 +1,4 @@
-import React, { Fragment, lazy, Suspense, useContext } from "react"
+import React, { Fragment, lazy, Suspense, useContext, useEffect } from "react"
 import Landing from "./pages/Landing"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
@@ -20,7 +20,16 @@ const App: React.FC = () => {
 
     const ctx = useContext(Context)
 
-    
+    useEffect(()=>{
+        const handleContextmenu = (e:Event) => {
+            e.preventDefault()
+        }
+        document.addEventListener('contextmenu', handleContextmenu)
+        return () => {
+            document.removeEventListener('contextmenu', handleContextmenu)
+        }
+    },[])
+
     if(JSON.parse(localStorage.getItem('auth') as string) || ctx?.auth) {
         routes = (
             

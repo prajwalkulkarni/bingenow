@@ -6,7 +6,6 @@ const Feature: React.FC<React.PropsWithChildren & {image:string}> = (props) => {
     const {children,image} = props
     
     if(!image.includes('tmdb')){
-        console.log(image)
         return (
         <div className="relative w-full h-screen"
         style={{backgroundImage:`url(${require(`../assets/cover/${image}.jpg`)})`,backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>

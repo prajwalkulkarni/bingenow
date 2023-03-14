@@ -49,7 +49,6 @@ const Login: React.FC<Record<string,never>> = () => {
 
     useEffect(()=>{
         if(dbData){
-            console.log(dbData)
             ctx?.setAuth(true)
             ctx?.setUsername(dbData.user?.displayName)
             localStorage.setItem('userId', JSON.stringify((dbData as any).data.createOrGetUser.id))
