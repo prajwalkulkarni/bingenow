@@ -156,16 +156,16 @@ const Landing: React.FC = () => {
                     <motion.div className='flex flex-col items-center p-4'
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{ once: true, amount: 0.5 }}
+                        viewport={{ once: true, amount: 0.3 }}
                         transition={{ duration: 0.5 }}
                         variants={{
                             visible: { opacity: 1, scale: 1 },
-                            hidden: { opacity: 0, scale: 0 }
+                            hidden: { opacity: 0, scale: 0, overflow: 'hidden' }
                         }}>
                         <p className='text-4xl font-semibold'>Watch on Any Device</p>
                         <p className='text-xl'>Bingenow works well on all sizes of devices. Enjoy your content on both large displays and small devices, such as smartphones.</p>
 
-                        <img src={require('../assets/cover/card3.png')} className='object-contain' style={{width:600}} />
+                        <img src={require('../assets/cover/card3.png')} className='object-contain' style={{width:600, objectFit: "contain"}} />
                     </motion.div>
 
                 </Card>

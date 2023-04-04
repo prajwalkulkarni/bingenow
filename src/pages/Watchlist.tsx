@@ -3,6 +3,7 @@ import useFetch from '../hooks/useFetch'
 import Loader from '../../UI/Loader';
 import Watchlistitem from '../components/Watchlistitem'
 import SnackbarExtended from '../../UI/SnackbarExtended';
+import { useGetWatchlist } from './hooks/useGetWatchlist';
 
 
 type WatchlistType = {
@@ -20,37 +21,12 @@ const Watchlist:React.FC = () => {
 
     const [watchlist, setWatchlist] = React.useState<WatchlistType[]>([])
     const [open, setOpen] = React.useState<boolean>(false)
-    const { isLoading: watchlistIsLoading, error: watchListError, data: watchListData} = useFetch({
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': '*'
-        },
-        body: JSON.stringify({
-            query: `
-            query {
-                watchlist(id:"${JSON.parse(localStorage.getItem('userId')!)}"){
-                    imdbId
-                    title
-                    poster
-                    plot
-                    runtime
-                    year
-                    genre
-                    media
-
-                }
-            }
-            `            
-        })
-    }, 'query')
+    const { isLoading: watchlistIsLoading, error: watchListError, data: watchListData} = useGetWatchlist()
 
     useEffect(() => {
         if(watchListData){
             setWatchlist(watchListData.data.watchlist??[])
         }
-
-        
     }, [watchListData])
 
 

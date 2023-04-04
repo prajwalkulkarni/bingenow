@@ -24,6 +24,7 @@ const Header: React.FC<Record<string, never>> = () => {
     const signoutHandler = () => {
         localStorage.removeItem('auth')
         localStorage.removeItem('username')
+        localStorage.removeItem('userId')
         ctx?.setAuth(false)
         ctx?.setUsername(null)
     }

@@ -4,8 +4,9 @@ const useFetch = (options: RequestInit = {}, queryType:string) => {
 
     
     async function submitHandler() {
-        const res = await fetch('http://localhost:3000/graphql', options)
+            const res = await fetch(`${process.env.REACT_APP_BACKEND_API}`, options)
         return res.json()
+        
     }
 
     if(queryType==='query'){

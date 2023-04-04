@@ -20,6 +20,7 @@ import getMessage from '../common/getMessage'
 import Error from '../components/ErrorPage';
 import { ContentSeparator, SkeletalPlaceholder } from '../common/CommonComponents';
 import { getHumanizedTimeFromMinutes } from '../utils/commonFunctions';
+import { useAddtoWatchlist } from './hooks/useAddToWatchlist';
 type MediaDetailsType = {
     title: string,
     year: string,
@@ -125,32 +126,18 @@ const Movie: React.FC<Record<string, never>> = () => {
 
     })
 
-    const { isLoading: addToWatchlistIsLoading, error: watchListError, data: watchListData, mutate: watchlistMutate } = useFetch({
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': '*'
-        },
-        body: JSON.stringify({
-            query: `
-            mutation {
-                addToWatchlist(item:{
-                    imdbId:"${imdbID}",
-                    title:"${data?.title}",
-                    poster:"https://image.tmdb.org/t/p/original${data?.backdrop}",
-                    plot:"${data?.plot}",
-                    runtime:"${data?.runtime}",
-                    year:"${data?.year}",
-                    genre:"${data?.genre}",
-                    media:"${mediaType}"
-                },userId:"${JSON.parse(localStorage.getItem('userId')!)}"){
-                    imdbId
-                    title
-                }
-            }
-            `
-        })
-    }, 'mutate')
+    const media_data = {
+        title: data?.title ?? "",
+        year: data?.year ?? "",
+        genre: data?.genre ?? "",
+        runtime: data?.runtime ?? "",
+        plot: data?.plot ?? "",
+        poster: `https://image.tmdb.org/t/p/original${data?.backdrop}`,
+        imdbId: imdbID ?? "",
+        media: mediaType
+
+    }
+    const { isLoading: addToWatchlistIsLoading, error: watchListError, data: watchListData, mutate: watchlistMutate } = useAddtoWatchlist(media_data)
 
     useEffect(() => {
         if (!addToWatchlistIsLoading && watchListData) {
@@ -235,7 +222,8 @@ const Movie: React.FC<Record<string, never>> = () => {
                                         data ? <>
                                             {mediaType === 'movie' && <Button className='mx-1' onClick={() => setPlay(true)}><PlayCircleOutlineIcon />Watch</Button>}
                                             <Button
-                                                className='mx-1' onClick={watchlistMutate}>
+                                                className='mx-1 disabled:opacity-75' onClick={watchlistMutate}
+                                                disabled={addToWatchlistIsLoading}>
                                                 {addToWatchlistIsLoading ?
                                                     <motion.div
                                                         animate={{

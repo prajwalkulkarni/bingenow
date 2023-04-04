@@ -7,6 +7,7 @@ import useFetch from '../hooks/useFetch';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AlbumIcon from '@mui/icons-material/Album';
 import { getHumanizedTimeFromMinutes } from '../utils/commonFunctions';
+import { useRemoveFromWatchlist } from '../pages/hooks/useRemoveFromWatchlist';
 
 type WatchlistType = {
     imdbId: string,
@@ -21,26 +22,9 @@ type WatchlistType = {
 }
 const Watchlistitem: React.FC<WatchlistType> = (props) => {
 
-    const { imdbId, title, poster, rerenderer, plot, runtime, year, genre, media } = props;
+    const { imdbId, title, poster, rerenderer, plot, runtime, year, genre, media } = props; 
 
-
-    const { isLoading: watchlistRmLoading, error: watchListRmError, data: watchListRmData, mutate: watchlistMutate } = useFetch({
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': '*'
-        },
-        body: JSON.stringify({
-            query: `
-            mutation {
-                removeFromWatchlist(imdbId:"${imdbId}",id:"${JSON.parse(localStorage.getItem('userId')!)}"){
-                    imdbId
-                    title
-                }
-            }
-            `
-        })
-    }, 'mutate')
+    const { isLoading: watchlistRmLoading, error: watchListRmError, data: watchListRmData, mutate: watchlistMutate } = useRemoveFromWatchlist(imdbId);
 
     useEffect(() => {
 

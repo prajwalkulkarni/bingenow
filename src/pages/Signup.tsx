@@ -15,6 +15,7 @@ import useFetch from '../hooks/useFetch'
 import SocialLogin from '../common/SocialLogin'
 import SnackbarExtended from '../../UI/SnackbarExtended'
 import ErrorPage from '../components/ErrorPage'
+import { useCreateOrGetUser } from './hooks/useCreateOrGetUser'
 
 
 const Signup: React.FC<Record<string,never>> = () => {
@@ -37,23 +38,7 @@ const Signup: React.FC<Record<string,never>> = () => {
         severity: 'success'
     })
 
-    const {error:dbError, data:dbData, mutate:dbMutate} = useFetch({
-        method:'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept':'*'
-        },
-        body: JSON.stringify({
-            query: `
-            mutation {
-                createOrGetUser(email:"${email}"){
-                    id
-                    email
-                }
-            }
-            `
-        })
-    },'mutate')
+    const {error:dbError, data:dbData, mutate:dbMutate} = useCreateOrGetUser(email);
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -141,9 +126,9 @@ const Signup: React.FC<Record<string,never>> = () => {
                         </div>
                         <Button type="submit"
                             disabled={!!data || isLoading }
-                            className='flex justify-center p-2 text-white rounded-md bg-violet-800 hover:bg-violet-900'>
+                            className='flex justify-center p-2 text-white rounded-md bg-violet-800 hover:bg-violet-900 disabled:opacity-75'>
 
-                            {isLoading ?
+                            {!!data || isLoading ?
                                 <motion.div
                                     animate={{
                                         transform: 'rotate(360deg)',

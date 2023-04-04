@@ -32,9 +32,9 @@ function reducer(state:{auth:boolean,username:string|null},action:ActionType){
     const {type} = action
 
     switch(type){
-        case 'SET_AUTH':
+        case Actions.SET_AUTH:
             return {...state,auth: action.payload.auth}
-        case 'SET_USERNAME':
+        case Actions.SET_USERNAME:
             return {...state,username: action.payload.username}
         default:
             return state

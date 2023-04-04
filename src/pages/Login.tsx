@@ -13,6 +13,7 @@ import Context from '../context/Context'
 import SocialLogin from '../common/SocialLogin'
 import SnackbarExtended from '../../UI/SnackbarExtended'
 import ErrorPage from '../components/ErrorPage'
+import { useCreateOrGetUser } from './hooks/useCreateOrGetUser'
 
 
 const Login: React.FC<Record<string,never>> = () => {
@@ -27,26 +28,8 @@ const Login: React.FC<Record<string,never>> = () => {
 
     const formIsValid = isValid && emailIsValid
 
-
-    const {error:dbError, data:dbData, mutate:dbMutate} = useFetch({
-        method:'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept':'*'
-        },
-        body: JSON.stringify({
-            query: `
-            mutation {
-                createOrGetUser(email:"${email}"){
-                    id
-                    email
-                }
-            }
-            `
-        })
-    },'mutate')
+    const {error:dbError, data:dbData, mutate:dbMutate} = useCreateOrGetUser(email);
     
-
     useEffect(()=>{
         if(dbData){
             ctx?.setAuth(true)
@@ -68,7 +51,6 @@ const Login: React.FC<Record<string,never>> = () => {
 
     const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
         
         try {
             if (formIsValid) {
@@ -95,7 +77,7 @@ const Login: React.FC<Record<string,never>> = () => {
         }
     }
 
-    const { isLoading, error, data, mutate } = useMutation(loginHandler, {
+    const { isLoading, status, error, data, mutate } = useMutation(loginHandler, {
         mutationKey: 'login',
     })
 
@@ -136,9 +118,11 @@ const Login: React.FC<Record<string,never>> = () => {
                                 required />
                             {isInvalid && <p className='text-red-500'>Password must be at least 8 characters</p>}
                         </div>
-                        <Button type="submit" className='w-full'>
-
-                            {isLoading ?
+                        <Button type="submit"
+                        disabled={!!data || isLoading } 
+                        className='w-full disabled:opacity-75'>
+                            
+                            {!!data || isLoading ?
                                 <motion.div
                                     animate={{
                                         transform: 'rotate(360deg)',
