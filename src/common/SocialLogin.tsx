@@ -45,7 +45,6 @@ const SocialLogin: React.FC<{}> = () => {
 
     useEffect(()=>{
         if (data) {
-            console.log(data);
             localStorage.setItem('userId', JSON.stringify(data.data.createOrGetUser.id))
             localStorage.setItem('auth', JSON.stringify(true))
             localStorage.setItem('username', JSON.stringify(ctx?.username));
