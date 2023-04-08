@@ -49,7 +49,7 @@ const Signup: React.FC<Record<string,never>> = () => {
                 await updateProfile(userCredential.user, { displayName: name })
                 await sendEmailVerification(userCredential.user)
     
-                await dbMutate!()
+                await dbMutate?.()
                 return userCredential
             }
         }
@@ -142,7 +142,7 @@ const Signup: React.FC<Record<string,never>> = () => {
                     </form>
 
                     <hr className='h-px py-1' />
-                    <SocialLogin dbMutate={dbMutate} data={dbData}/>
+                    <SocialLogin  />
                 </div>
 
             </div>

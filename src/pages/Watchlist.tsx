@@ -59,7 +59,7 @@ const Watchlist:React.FC = () => {
     return (
         <div>
                    
-            <p className='self-start p-3 text-5xl font-bold'>My Watchlist</p>
+            <p className='self-start p-3 text-3xl font-bold md:text-5xl'>My Watchlist</p>
             {watchListData && watchlist?.map((item:WatchlistType) => {
                 return (
                     <Watchlistitem

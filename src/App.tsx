@@ -7,6 +7,7 @@ import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import { QueryClientProvider, QueryClient } from "react-query"
 import Context from "./context/Context"
+import ErrorBoundary from "./components/ErrorBoundary"
 
 const Home = lazy(() => import("./pages/Home"));
 const Movie = lazy(() => import("./pages/Movie"));
@@ -30,30 +31,30 @@ const App: React.FC = () => {
     //     }
     // },[])
 
-    if(JSON.parse(localStorage.getItem('auth') as string) || ctx?.auth) {
+    if (JSON.parse(localStorage.getItem('auth') as string) || ctx?.auth) {
         routes = (
-            
+
             <Routes>
-                <Route path="/" element={<Home movies={true} />} />
-                <Route path="/:mediaType/:imdbID/" element={<Movie/>} />
-                <Route path="/mywatchlist" element={<Watchlist/>} />
-                <Route path='/contact' element={<Contact/>} />
-            <Route path="/privacypolicy" element={<PrivacyPolicy/>} />
-                <Route path="*" element={<Navigate to='/' replace/>} />
-                <Route path='/shows' element={<Home movies={false} />} />
+                <Route path="/" element={<ErrorBoundary key="home"><Home movies={true} /></ErrorBoundary>} />
+                <Route path="/:mediaType/:imdbID/" element={<ErrorBoundary key="media"><Movie /></ErrorBoundary>} />
+                <Route path="/mywatchlist" element={<ErrorBoundary key="watchlist"><Watchlist /></ErrorBoundary>} />
+                <Route path='/contact' element={<ErrorBoundary key="contact"><Contact /></ErrorBoundary>} />
+                <Route path="/privacypolicy" element={<ErrorBoundary key="privacy"><PrivacyPolicy /></ErrorBoundary>} />
+                <Route path="*" element={<Navigate to='/' replace />} />
+                <Route path='/shows' element={<ErrorBoundary key="shows"><Home movies={false} /></ErrorBoundary>} />
             </Routes>
-        
+
         )
     }
-     else {
+    else {
         routes = (
             <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path='/contact' element={<Contact/>} />
-            <Route path="/privacypolicy" element={<PrivacyPolicy/>} />
-                <Route path="*" element={<Navigate to='/' replace/>} />
+                <Route path='/contact' element={<Contact />} />
+                <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+                <Route path="*" element={<Navigate to='/' replace />} />
             </Routes>
         )
     }
@@ -61,13 +62,15 @@ const App: React.FC = () => {
     return (
         <Fragment>
             <QueryClientProvider client={queryClient}>
+
                 <BrowserRouter>
                     <Header />
                     <Suspense fallback={<div>Loading...</div>}>
-                    {routes}
+                        {routes}
                     </Suspense>
                     <Footer />
                 </BrowserRouter>
+
             </QueryClientProvider>
         </Fragment>
     )

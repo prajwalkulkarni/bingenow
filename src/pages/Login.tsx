@@ -32,6 +32,7 @@ const Login: React.FC<Record<string,never>> = () => {
     
     useEffect(()=>{
         if(dbData){
+           
             ctx?.setAuth(true)
             ctx?.setUsername(dbData.user?.displayName)
             localStorage.setItem('userId', JSON.stringify((dbData as any).data.createOrGetUser.id))
@@ -59,7 +60,7 @@ const Login: React.FC<Record<string,never>> = () => {
 
                 if(userCredential.user.emailVerified){
                     
-                    dbMutate!()
+                    dbMutate?.();
                     
                     return userCredential
                 }else{
@@ -136,7 +137,7 @@ const Login: React.FC<Record<string,never>> = () => {
                     </form>
 
                     <hr className='h-px py-1' />
-                    <SocialLogin dbMutate={dbMutate} data={dbData}/>
+                    <SocialLogin />
                 </div>
 
             </div>

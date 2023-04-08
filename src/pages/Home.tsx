@@ -117,7 +117,7 @@ const MediaCards = (props: MediaCardsType) => {
     }
     return(
         <div className='flex flex-col p-2'>
-                <p className='py-3 text-5xl font-bold'>{title}</p>
+                <p className='py-3 text-3xl font-bold md:text-5xl'>{title}</p>
                 <CardListLazy category={category} movies={movies} />
         </div>
     )

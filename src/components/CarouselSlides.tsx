@@ -152,7 +152,7 @@ const CarouselSlides = (props: CarouselSlidesType) => {
                                 onClick={() => setPlay(false)} />, document.getElementById('portal')!)}
                             <div className='flex'>
                                 <div className='flex flex-col p-6 md:w-4/5'>
-                                    <p className='text-3xl font-bold text-white md:text-5xl'>{media_data_carousel.title}</p>
+                                    <p className='text-2xl font-bold text-white md:text-5xl'>{media_data_carousel.title}</p>
                                     <p className='hidden p-1 text-lg text-white lg:block'>{media_data_carousel.plot}</p>
 
                                     <div className='flex-col justify-start hidden mt-4 md:flex md:items-start lg:flex-row'>

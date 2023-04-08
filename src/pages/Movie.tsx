@@ -168,7 +168,7 @@ const Movie: React.FC<Record<string, never>> = () => {
                     <div className='flex'>
                         <div className='flex flex-col p-6 md:w-1/2'>
                             <SnackbarExtended open={open} message={toast.message} severity={toast.severity} handleClose={handleClose} />
-                            {data ? <p className='text-5xl font-bold text-white'>{data.title}</p> : <SkeletalPlaceholder height={6} />}
+                            {data ? <p className='text-2xl font-bold text-white md:text-5xl'>{data.title}</p> : <SkeletalPlaceholder height={6} />}
                             <div className='flex flex-col py-3 md:flex-row md:items-center'>
                                 {mediaType === 'series' && <FormControl sx={{ minWidth: 120 }} size="small"
                                     className='text-white border-none h-fit w-fit bg-violet-800 hover:border-none hover:text-white'>
@@ -196,22 +196,22 @@ const Movie: React.FC<Record<string, never>> = () => {
                                     </Select>
                                 </FormControl>}
                                 {data ? <div className='flex flex-col md:flex-row'>
-                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><AccessTimeIcon /> &nbsp;- {getHumanizedTimeFromMinutes(parseInt(data.runtime))}</p>
+                                    <p className='flex items-center font-semibold text-white text-md md:text-lg sm:px-1'><AccessTimeIcon /> &nbsp;- {getHumanizedTimeFromMinutes(parseInt(data.runtime))}</p>
                                     <ContentSeparator />
-                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><StarOutlineIcon /> &nbsp;- IMdb {data.imdbRating}</p>
+                                    <p className='flex items-center font-semibold text-white text-md md:text-lg sm:px-1'><StarOutlineIcon /> &nbsp;- IMdb {data.imdbRating}</p>
                                     <ContentSeparator />
-                                    <p className='flex items-center text-lg font-semibold text-white sm:px-1'><CalendarMonthIcon /> &nbsp;- {data.year}</p></div> : <SkeletalPlaceholder height={4} />}
+                                    <p className='flex items-center font-semibold text-white text-md md:text-lg sm:px-1'><CalendarMonthIcon /> &nbsp;- {data.year}</p></div> : <SkeletalPlaceholder height={4} />}
 
                             </div>
-                            {data ? <p className='p-1 text-lg text-white'>{data.plot}</p> : <SkeletalPlaceholder height={8} />}
+                            {data ? <p className='p-1 text-white text-md md:text-lg'>{data.plot}</p> : <SkeletalPlaceholder height={8} />}
 
                             <div className='flex flex-col justify-center mt-4'>
                                 {
                                     data ?
                                         <>
-                                            <p className='text-lg font-semibold text-white sm:px-1'>Director: {data.director}</p>
-                                            <p className='text-lg font-semibold text-white sm:px-1'>Actors: {data.actors}</p>
-                                            <p className='text-lg font-semibold text-white sm:px-1'>Genre: {data.genre}</p>
+                                            <p className='font-semibold text-white text-md md:text-lg sm:px-1'>Director: {data.director}</p>
+                                            <p className='font-semibold text-white text-md md:text-lg sm:px-1'>Actors: {data.actors}</p>
+                                            <p className='font-semibold text-white text-md md:text-lg sm:px-1'>Genre: {data.genre}</p>
 
 
                                         </> :

@@ -4,20 +4,55 @@ import {
     signInWithPopup
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import GoogleIcon from '@mui/icons-material/Google';
 import { app } from '../firebase'
 import Context from "../context/Context";
-import { UseMutateFunction } from "react-query";
+import { UseMutateFunction, useMutation } from "react-query";
+import useFetch from "../hooks/useFetch";
 const provider = new GoogleAuthProvider();
 
 /* eslint @typescript-eslint/no-explicit-any: "off" */
-const SocialLogin: React.FC<{ dbMutate: UseMutateFunction<any, unknown, void, unknown> | undefined, data: {id:string} }> = (props) => {
 
-    const { dbMutate, data } = props
+async function login(email:string) {
+
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_API}`,{
+        method:'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept':'*'
+        },
+        body: JSON.stringify({
+            query: `
+            mutation {
+                createOrGetUser(email:"${email}"){
+                    id
+                    email
+                }
+            }
+            `
+        })
+    })
+
+    return res.json(); 
+}
+const SocialLogin: React.FC<{}> = () => {
+
+    const { data, mutate } = useMutation(login)
     const auth = getAuth(app);
     const navigate = useNavigate()
     const ctx = useContext(Context)
+
+    useEffect(()=>{
+        if (data) {
+            console.log(data);
+            localStorage.setItem('userId', JSON.stringify(data.data.createOrGetUser.id))
+            localStorage.setItem('auth', JSON.stringify(true))
+            localStorage.setItem('username', JSON.stringify(ctx?.username));
+            ctx?.setAuth(true)
+            navigate('/', { replace: true })
+        }
+    },[data])
 
     const socialLogin = async () => {
 
@@ -26,25 +61,16 @@ const SocialLogin: React.FC<{ dbMutate: UseMutateFunction<any, unknown, void, un
             // const credential = GoogleAuthProvider.credentialFromResult(result);
             // The signed-in user info.
             const user = result.user;
-            await dbMutate!()
+            ctx?.setUsername(user.displayName);
+            await mutate(user.email as string);
             // console.log(props.data)
             // const data = await res.json()
-            if (data) {
-                localStorage.setItem('id', JSON.stringify((data).id))
-                localStorage.setItem('auth', JSON.stringify(true))
-                localStorage.setItem('username', JSON.stringify(user?.displayName))
-
-                ctx?.setAuth(true)
-                ctx?.setUsername(user?.displayName)
-                navigate('/', { replace: true })
-            }
-
-
         }
         catch (error: any) {
             const errorMessage = error.message;
             // The email of the user's account used.
             console.log(errorMessage)
+            throw new Error(errorMessage);
             // The AuthCredential type that was used.
             // const credential = GoogleAuthProvider.credentialFromError(error);
         }
