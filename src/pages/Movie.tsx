@@ -7,8 +7,6 @@ import { useQuery } from 'react-query';
 import Seasons from '../components/Seasons';
 import Feature from '../components/Feature';
 import MediaPortal from '../components/MediaPortal';
-import { motion } from 'framer-motion'
-import useFetch from '../hooks/useFetch';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
@@ -21,6 +19,8 @@ import Error from '../components/ErrorPage';
 import { ContentSeparator, SkeletalPlaceholder } from '../common/CommonComponents';
 import { getHumanizedTimeFromMinutes } from '../utils/commonFunctions';
 import { useAddtoWatchlist } from './hooks/useAddToWatchlist';
+import {CircularProgress} from '@mui/material';
+
 type MediaDetailsType = {
     title: string,
     year: string,
@@ -225,14 +225,7 @@ const Movie: React.FC<Record<string, never>> = () => {
                                                 className='mx-1 disabled:opacity-75' onClick={watchlistMutate}
                                                 disabled={addToWatchlistIsLoading}>
                                                 {addToWatchlistIsLoading ?
-                                                    <motion.div
-                                                        animate={{
-                                                            transform: 'rotate(360deg)',
-                                                            transition: { duration: 1, repeat: Infinity, repeatType: 'loop' }
-
-                                                        }}
-
-                                                        className='w-6 h-6 border-t-2 border-l-2 border-white rounded-xl'></motion.div> : 'Add to watchlist'}
+                                                    <CircularProgress style={{color:"white"}} size={20}/> : 'Add to watchlist'}
                                             </Button>
                                         </> :
                                             <SkeletalPlaceholder height={8} />

@@ -14,6 +14,8 @@ import SocialLogin from '../common/SocialLogin'
 import SnackbarExtended from '../../UI/SnackbarExtended'
 import ErrorPage from '../components/ErrorPage'
 import { useCreateOrGetUser } from './hooks/useCreateOrGetUser'
+import { CircularProgress } from '@mui/material'
+import Loader from '../../UI/Loader'
 
 
 const Login: React.FC<Record<string,never>> = () => {
@@ -28,7 +30,7 @@ const Login: React.FC<Record<string,never>> = () => {
 
     const formIsValid = isValid && emailIsValid
 
-    const {error:dbError, data:dbData, mutate:dbMutate} = useCreateOrGetUser(email);
+    const {error:dbError, data:dbData, mutate:dbMutate, isLoading: dbLoading} = useCreateOrGetUser(email);
     
     useEffect(()=>{
         if(dbData){
@@ -52,7 +54,6 @@ const Login: React.FC<Record<string,never>> = () => {
 
     const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        
         try {
             if (formIsValid) {
 
@@ -69,7 +70,6 @@ const Login: React.FC<Record<string,never>> = () => {
             }
         }
         catch (error: any) {
-            
             const errorMessage = error.message;
             setOpen(true)
             ctx?.setAuth(false)
@@ -92,7 +92,7 @@ const Login: React.FC<Record<string,never>> = () => {
 
                 <SnackbarExtended open={open} handleClose={handleClose} severity='error' message={data} />
                 <div className='w-3/4 px-4 py-3 bg-white rounded-lg sm:mx-auto sm:w-full sm:max-w-md'>
-                    <form onSubmit={mutate}
+                    {ctx?.socialLoginLoading ? <Loader text='Logging in...' /> : <form onSubmit={mutate}
                         className='flex flex-col'>
 
                         <div className='flex flex-col py-2'>
@@ -120,21 +120,14 @@ const Login: React.FC<Record<string,never>> = () => {
                             {isInvalid && <p className='text-red-500'>Password must be at least 8 characters</p>}
                         </div>
                         <Button type="submit"
-                        disabled={!!data || isLoading } 
+                        disabled={dbLoading || isLoading } 
                         className='w-full disabled:opacity-75'>
                             
-                            {!!data || isLoading ?
-                                <motion.div
-                                    animate={{
-                                        transform: 'rotate(360deg)',
-                                        transition: { duration: 1, repeat: Infinity, repeatType: 'loop' }
-
-                                    }}
-
-                                    className='w-6 h-6 border-t-2 border-l-2 border-white rounded-xl'></motion.div> : 'Login'}
+                            {(isLoading || dbLoading) ?
+                                <CircularProgress style={{color:"white"}} size={20}/> : 'Login'}
                         </Button>
                         <p className='py-1 text-sm text-gray-400'>Don't have an account? <Link to='/signup'>Signup</Link></p>
-                    </form>
+                    </form>}
 
                     <hr className='h-px py-1' />
                     <SocialLogin />

@@ -8,6 +8,7 @@ import Signup from "./pages/Signup"
 import { QueryClientProvider, QueryClient } from "react-query"
 import Context from "./context/Context"
 import ErrorBoundary from "./components/ErrorBoundary"
+import Loader from "../UI/Loader"
 
 const Home = lazy(() => import("./pages/Home"));
 const Movie = lazy(() => import("./pages/Movie"));
@@ -65,7 +66,7 @@ const App: React.FC = () => {
 
                 <BrowserRouter>
                     <Header />
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<Loader text="Loading..." />}>
                         {routes}
                     </Suspense>
                     <Footer />

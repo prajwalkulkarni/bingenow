@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import Card from '../../UI/Card';
 import { Link } from 'react-router-dom';
 import Button from '../../UI/Button';
-import { motion } from 'framer-motion';
-import useFetch from '../hooks/useFetch';
+import {CircularProgress} from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AlbumIcon from '@mui/icons-material/Album';
 import { getHumanizedTimeFromMinutes } from '../utils/commonFunctions';
@@ -65,14 +64,7 @@ const Watchlistitem: React.FC<WatchlistType> = (props) => {
 
                         <Button onClick={() => watchlistMutate!()} className='bg-red-500 hover:bg-red-600'>
                             {watchlistRmLoading ?
-                                <motion.div
-                                    animate={{
-                                        transform: 'rotate(360deg)',
-                                        transition: { duration: 1, repeat: Infinity, repeatType: 'loop' }
-
-                                    }}
-
-                                    className='w-6 h-6 border-t-2 border-l-2 border-white rounded-xl'></motion.div> : 'Remove'}
+                                <CircularProgress style={{color:"white"}} size={20}/> : 'Remove'}
                         </Button>
                     </div>
 

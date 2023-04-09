@@ -1,4 +1,4 @@
-import React,{ useEffect} from 'react'
+import React,{ useContext, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import { emailRegEx } from '../CONSTANTS'
 import { app } from '../firebase'
@@ -16,11 +16,14 @@ import SocialLogin from '../common/SocialLogin'
 import SnackbarExtended from '../../UI/SnackbarExtended'
 import ErrorPage from '../components/ErrorPage'
 import { useCreateOrGetUser } from './hooks/useCreateOrGetUser'
+import { CircularProgress } from '@mui/material'
+import Context from '../context/Context'
+import Loader from '../../UI/Loader'
 
 
 const Signup: React.FC<Record<string,never>> = () => {
     const auth = getAuth(app);
-    
+    const ctx = useContext(Context);
 
     const { val: password, isInvalid, isValid, onBlurHandler, onFocusHandler, onChangeHandler } = useAuth((val: string) => val.length >= 8)
     const { val: email, isInvalid: emailIsInvalid, isValid: emailIsValid, onBlurHandler: emailOnBlurHandler,
@@ -38,7 +41,7 @@ const Signup: React.FC<Record<string,never>> = () => {
         severity: 'success'
     })
 
-    const {error:dbError, data:dbData, mutate:dbMutate} = useCreateOrGetUser(email);
+    const {error:dbError, data:dbData, mutate:dbMutate, isLoading: dbLoading} = useCreateOrGetUser(email);
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -86,7 +89,7 @@ const Signup: React.FC<Record<string,never>> = () => {
                 <SnackbarExtended open={open} severity={snackbarData.severity} message={snackbarData.message}
                 handleClose={()=>setOpen(false)}/>
                 <div className='w-3/4 px-4 py-3 bg-white rounded-lg sm:mx-auto sm:w-full sm:max-w-md'>
-                    <form onSubmit={mutate} className='flex flex-col'>
+                    {ctx?.socialLoginLoading ? <Loader text='Setting up your account'/>: <form onSubmit={mutate} className='flex flex-col'>
 
                         <div className='flex flex-col py-2'>
                             <label htmlFor="displayname">Name*</label>
@@ -125,21 +128,14 @@ const Signup: React.FC<Record<string,never>> = () => {
                             {isInvalid && <p className='text-red-500'>Password must be at least 8 characters</p>}
                         </div>
                         <Button type="submit"
-                            disabled={!!data || isLoading }
+                            disabled={dbLoading || isLoading }
                             className='flex justify-center p-2 text-white rounded-md bg-violet-800 hover:bg-violet-900 disabled:opacity-75'>
 
-                            {!!data || isLoading ?
-                                <motion.div
-                                    animate={{
-                                        transform: 'rotate(360deg)',
-                                        transition: { duration: 1, repeat: Infinity, repeatType: 'loop' }
-
-                                    }}
-
-                                    className='w-6 h-6 border-t-2 border-l-2 border-white rounded-xl'></motion.div> : 'Create account'}
+                            {isLoading || dbLoading ?
+                                <CircularProgress style={{color:"white"}} size={20}/>  : 'Create account'}
                         </Button>
                         <p className='py-1 text-sm text-gray-400'>Have an account already? <Link to='/login'>Sign in</Link></p>
-                    </form>
+                    </form>}
 
                     <hr className='h-px py-1' />
                     <SocialLogin  />

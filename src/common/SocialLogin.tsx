@@ -50,11 +50,12 @@ const SocialLogin: React.FC<{}> = () => {
             localStorage.setItem('username', JSON.stringify(ctx?.username));
             ctx?.setAuth(true)
             navigate('/', { replace: true })
+            ctx?.setSocialLoginLoading(false);
         }
     },[data])
 
     const socialLogin = async () => {
-
+        ctx?.setSocialLoginLoading(true);
         try {
             const result = await signInWithPopup(auth, provider)
             // const credential = GoogleAuthProvider.credentialFromResult(result);

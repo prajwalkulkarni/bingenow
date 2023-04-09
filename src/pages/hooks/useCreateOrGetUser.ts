@@ -1,7 +1,7 @@
 import useFetch from "../../hooks/useFetch"
 
 export const useCreateOrGetUser = (email: string) => {
-    const {error, data, mutate} = useFetch({
+    const {error, data, mutate, isLoading} = useFetch({
         method:'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -19,5 +19,5 @@ export const useCreateOrGetUser = (email: string) => {
         })
     },'mutate');
 
-    return {error, data, mutate}
+    return {error, data, mutate, isLoading}
 }
