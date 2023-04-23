@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const Footer: React.FC = () => {
 
     return (
-        <footer className="flex flex-col w-full mt-12 bg-gray-100">
+        <footer className="flex flex-col w-full bg-gray-100">
             <div className='flex flex-col justify-between w-full p-2 md:items-center md:flex-row'>
                 <div className='flex justify-center w-full md:w-fit'>
                     <img src={require('../assets/bingenow-square.png')} alt="Bingenow" style={{ objectFit: 'contain' }} width="200" />

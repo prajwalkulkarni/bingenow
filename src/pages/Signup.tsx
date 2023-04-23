@@ -1,4 +1,4 @@
-import React,{ useContext, useEffect} from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { emailRegEx } from '../CONSTANTS'
 import { app } from '../firebase'
@@ -21,7 +21,7 @@ import Context from '../context/Context'
 import Loader from '../../UI/Loader'
 
 
-const Signup: React.FC<Record<string,never>> = () => {
+const Signup: React.FC<Record<string, never>> = () => {
     const auth = getAuth(app);
     const ctx = useContext(Context);
 
@@ -36,28 +36,28 @@ const Signup: React.FC<Record<string,never>> = () => {
     const formValid = isValid && emailIsValid && nameIsValid
 
     const [open, setOpen] = React.useState(false);
-    const [snackbarData, setSnackbarData] = React.useState<{message:string,severity:'error'|'success'|'info'|'warning'}>({
+    const [snackbarData, setSnackbarData] = React.useState<{ message: string, severity: 'error' | 'success' | 'info' | 'warning' }>({
         message: '',
         severity: 'success'
     })
 
-    const {error:dbError, data:dbData, mutate:dbMutate, isLoading: dbLoading} = useCreateOrGetUser(email);
+    const { error: dbError, data: dbData, mutate: dbMutate, isLoading: dbLoading } = useCreateOrGetUser(email);
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        try{
+        try {
             if (formValid) {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password)
                 await updateProfile(userCredential.user, { displayName: name })
                 await sendEmailVerification(userCredential.user)
-    
+
                 await dbMutate?.()
                 return userCredential
             }
         }
-        catch(err){
-            console.log("Error in creating user",err)
+        catch (err) {
+            console.log("Error in creating user", err)
             setOpen(true)
             setSnackbarData({
                 message: 'Something went wrong',
@@ -68,7 +68,7 @@ const Signup: React.FC<Record<string,never>> = () => {
     const { isLoading, error, data, mutate } = useMutation(submitHandler)
 
     useEffect(() => {
-        if (data&& !isLoading) {
+        if (data && !isLoading) {
             setOpen(true)
             setSnackbarData({
                 message: 'An email has been sent to your email address. Please verify your email address.',
@@ -79,17 +79,17 @@ const Signup: React.FC<Record<string,never>> = () => {
     }, [data])
     // const { isLoading: socialLoginLoading, error: socialLoginError, data: socialLoginData } = useMutation(socialLogin)
 
-    if(error || dbError){
-        return <ErrorPage/>
+    if (error || dbError) {
+        return <ErrorPage />
     }
     return (
         <Feature image='cover'>
             <div className='flex items-center justify-center min-h-[80vh]'>
 
                 <SnackbarExtended open={open} severity={snackbarData.severity} message={snackbarData.message}
-                handleClose={()=>setOpen(false)}/>
+                    handleClose={() => setOpen(false)} />
                 <div className='w-3/4 px-4 py-3 bg-white rounded-lg sm:mx-auto sm:w-full sm:max-w-md'>
-                    {ctx?.socialLoginLoading ? <Loader text='Setting up your account'/>: <form onSubmit={mutate} className='flex flex-col'>
+                    {ctx?.socialLoginLoading ? <Loader text='Setting up your account' /> : <form onSubmit={mutate} className='flex flex-col'>
 
                         <div className='flex flex-col py-2'>
                             <label htmlFor="displayname">Name*</label>
@@ -128,17 +128,17 @@ const Signup: React.FC<Record<string,never>> = () => {
                             {isInvalid && <p className='text-red-500'>Password must be at least 8 characters</p>}
                         </div>
                         <Button type="submit"
-                            disabled={dbLoading || isLoading }
+                            disabled={dbLoading || isLoading}
                             className='flex justify-center p-2 text-white rounded-md bg-violet-800 hover:bg-violet-900 disabled:opacity-75'>
 
                             {isLoading || dbLoading ?
-                                <CircularProgress style={{color:"white"}} size={20}/>  : 'Create account'}
+                                <CircularProgress style={{ color: "white" }} size={20} /> : 'Create account'}
                         </Button>
                         <p className='py-1 text-sm text-gray-400'>Have an account already? <Link to='/login'>Sign in</Link></p>
                     </form>}
 
                     <hr className='h-px py-1' />
-                    <SocialLogin  />
+                    <SocialLogin disabled={isLoading || dbLoading} />
                 </div>
 
             </div>

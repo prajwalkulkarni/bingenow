@@ -130,7 +130,7 @@ const Login: React.FC<Record<string,never>> = () => {
                     </form>}
 
                     <hr className='h-px py-1' />
-                    <SocialLogin />
+                    <SocialLogin disabled={isLoading || dbLoading}/>
                 </div>
 
             </div>

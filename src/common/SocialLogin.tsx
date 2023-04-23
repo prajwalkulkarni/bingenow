@@ -14,13 +14,13 @@ const provider = new GoogleAuthProvider();
 
 /* eslint @typescript-eslint/no-explicit-any: "off" */
 
-async function login(email:string) {
+async function login(email: string) {
 
-    const res = await fetch(`${process.env.REACT_APP_BACKEND_API}`,{
-        method:'POST',
+    const res = await fetch(`${process.env.REACT_APP_BACKEND_API}`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept':'*'
+            'Accept': '*'
         },
         body: JSON.stringify({
             query: `
@@ -34,16 +34,17 @@ async function login(email:string) {
         })
     })
 
-    return res.json(); 
+    return res.json();
 }
-const SocialLogin: React.FC<{}> = () => {
+const SocialLogin: React.FC<{disabled?:boolean}> = (props) => {
 
     const { data, mutate } = useMutation(login)
     const auth = getAuth(app);
     const navigate = useNavigate()
     const ctx = useContext(Context)
+    const {disabled} = props;
 
-    useEffect(()=>{
+    useEffect(() => {
         if (data) {
             localStorage.setItem('userId', JSON.stringify(data.data.createOrGetUser.id))
             localStorage.setItem('auth', JSON.stringify(true))
@@ -52,7 +53,7 @@ const SocialLogin: React.FC<{}> = () => {
             navigate('/', { replace: true })
             ctx?.setSocialLoginLoading(false);
         }
-    },[data])
+    }, [data])
 
     const socialLogin = async () => {
         ctx?.setSocialLoginLoading(true);
@@ -70,6 +71,7 @@ const SocialLogin: React.FC<{}> = () => {
             const errorMessage = error.message;
             // The email of the user's account used.
             console.log(errorMessage)
+            ctx?.setSocialLoginLoading(false);
             throw new Error(errorMessage);
             // The AuthCredential type that was used.
             // const credential = GoogleAuthProvider.credentialFromError(error);
@@ -77,9 +79,12 @@ const SocialLogin: React.FC<{}> = () => {
 
     }
     return (
-        <div
-            className='flex items-center justify-center py-2 space-x-2 border border-gray-400 rounded-md cursor-pointer hover:bg-slate-200'
-            onClick={socialLogin}><GoogleIcon /><span className='px-1'>Signin with Google</span></div>
+        <button
+            className='flex items-center justify-center w-full py-2 space-x-2 border border-gray-400 rounded-md cursor-pointer disabled:cursor-not-allowed disabled:opacity-75 hover:bg-slate-200'
+            disabled={disabled}
+            onClick={socialLogin}>
+                <GoogleIcon /><span className='px-1'>Signin with Google</span>
+        </button>
     )
 }
 export default SocialLogin;
