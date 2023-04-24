@@ -62,7 +62,7 @@ const Watchlistitem: React.FC<WatchlistType> = (props) => {
                         <Link className='mx-1' to={`/${media}/${imdbId}`}>
                             <Button>Watch</Button></Link>
 
-                        <Button onClick={() => watchlistMutate!()} className='bg-red-500 hover:bg-red-600'>
+                        <Button onClick={() => watchlistMutate!()} className='bg-red-500 hover:bg-red-600 disbaled:opacity-75' disabled={watchlistRmLoading}>
                             {watchlistRmLoading ?
                                 <CircularProgress style={{color:"white"}} size={20}/> : 'Remove'}
                         </Button>

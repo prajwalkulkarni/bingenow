@@ -12,7 +12,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AlbumIcon from '@mui/icons-material/Album';
-import { motion } from 'framer-motion'
+import {CircularProgress} from "@mui/material"
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useAddtoWatchlist } from '../pages/hooks/useAddToWatchlist';
@@ -178,14 +178,7 @@ const CarouselSlides = (props: CarouselSlidesType) => {
                                                         className='m-1 disbaled:opacity-75' onClick={watchlistMutate}
                                                         disabled={addToWatchlistIsLoading}>
                                                         {addToWatchlistIsLoading ?
-                                                            <motion.div
-                                                                animate={{
-                                                                    transform: 'rotate(360deg)',
-                                                                    transition: { duration: 1, repeat: Infinity, repeatType: 'loop' }
-
-                                                                }}
-
-                                                                className='w-6 h-6 border-t-2 border-l-2 border-white rounded-xl'></motion.div> : 'Add to watchlist'}
+                                                            <CircularProgress />: 'Add to watchlist'}
                                                     </Button>
                                                 </> :
                                                 <SkeletalPlaceholder height={8}/>
