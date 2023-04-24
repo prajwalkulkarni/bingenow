@@ -10,7 +10,7 @@ Before you make your contribution, I'd quickly want you to run through some guid
 - If you're writing a component, make sure the extension is `.tsx`.
 - If you're writing a reusable UI component, put it under `src/UI/your-component` directory.
 - Try and incorporate best practices like, keep the code concise, using `const` and `let` instead of `var`. Use `async/await` instead of `.then` syntax for handling asynchronous code etc.
-- You may omit writing a stylesheet if you happen to use `styled-components`.
+- All the styles are written in tailwindCSS.
 
 ## Getting Started:
 
@@ -28,14 +28,13 @@ cd bingenow
 
 - Install the dependencies
 ```terminal
-npm install
+yarn install
 ```
 
 - To run the project locally
 ```terminal
-npm start
+yarn start
 ```
-
 
 ## Making a contribution:
 
