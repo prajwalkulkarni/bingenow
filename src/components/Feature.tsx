@@ -19,7 +19,7 @@ const Feature: React.FC<React.PropsWithChildren & {image:string}> = (props) => {
     else{
         return (
             <div className="relative w-full h-screen"
-            style={{backgroundImage:`url(${image})`,backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
+            style={{backgroundImage:`url(${image})`,backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition:'center' }}>
     
                 <div className="absolute w-full h-full bg-gradient-to-r from-black to-transparent">
                     {children}
