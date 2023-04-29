@@ -21,7 +21,7 @@ export const useAddtoWatchlist = (media_data: CarouselType) => {
                     runtime:"${media_data.runtime}",
                     year:"${media_data.year}",
                     genre:"${media_data.genre}",
-                    media:"movie"
+                    media:"${media_data?.media}",
                 },userId:"${JSON.parse(localStorage.getItem('userId')!)}"){
                     imdbId
                     title

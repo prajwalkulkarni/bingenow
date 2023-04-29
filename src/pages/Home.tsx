@@ -58,6 +58,7 @@ export type CarouselType = {
     runtime: string;
     year: string;
     genre: string;
+    media?: string;
 }
 
 const MediaCardsContainer = (props:{movies:boolean, isLoading:boolean}) => {
