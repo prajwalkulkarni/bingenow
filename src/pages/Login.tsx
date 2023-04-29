@@ -36,11 +36,9 @@ const Login: React.FC<Record<string,never>> = () => {
         if(dbData){
            
             ctx?.setAuth(true)
-            ctx?.setUsername(dbData.user?.displayName)
             localStorage.setItem('userId', JSON.stringify((dbData as any).data.createOrGetUser.id))
         
             localStorage.setItem('auth', JSON.stringify(true))
-            localStorage.setItem('username', JSON.stringify(dbData.user?.displayName))
             navigate('/', { replace: true })
         }
     },[dbData])
@@ -62,6 +60,8 @@ const Login: React.FC<Record<string,never>> = () => {
                 if(userCredential.user.emailVerified){
                     
                     dbMutate?.();
+                    localStorage.setItem('username', JSON.stringify(userCredential.user.displayName))
+                    ctx?.setUsername(userCredential.user.displayName)
                     
                     return userCredential
                 }else{
