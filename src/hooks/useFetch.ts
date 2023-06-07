@@ -1,10 +1,18 @@
 import { useMutation, useQuery } from "react-query"
+import { getLatestAuthToken } from "../utils/manageToken"
 
 const useFetch = (options: RequestInit = {}, queryType:string) => {
 
     
     async function submitHandler() {
-            const res = await fetch(`${process.env.REACT_APP_BACKEND_API}`, options)
+        const token = await getLatestAuthToken();
+            const res = await fetch(`${process.env.REACT_APP_BACKEND_API}`, {
+                ...options,
+                headers:{
+                    ...options.headers,
+                    Authorization: "Bearer " + token,
+                }
+            })
         return res.json()
         
     }
