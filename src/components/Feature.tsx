@@ -17,13 +17,13 @@ const Feature: React.FC<React.PropsWithChildren & { image: string }> = (
       <div
         className="relative w-full h-screen"
         style={{
-          backgroundImage: `url(${require(`../assets/cover/${image}.jpg`)})`,
+          backgroundImage: loaded
+            ? `url(${require(`../assets/cover/${image}.jpg`)})`
+            : `url(${require(`../assets/cover/cover-small.png`)})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center center",
-          transition: "filter 0.5s ease-in-out",
-          filter: loaded ? "none" : "blur(10px)",
-          transform: loaded ? "none" : "scale(1.1)",
+          transition: "background 0.5s ease-in-out",
         }}
       >
         <img
