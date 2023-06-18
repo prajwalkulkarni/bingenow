@@ -18,6 +18,7 @@ import getMessage from "../common/getMessage";
 import Error from "../components/ErrorPage";
 import {
   ContentSeparator,
+  FullScreenLoader,
   SkeletalPlaceholder,
 } from "../common/CommonComponents";
 import { getHumanizedTimeFromMinutes } from "../utils/commonFunctions";
@@ -80,7 +81,7 @@ const Movie: React.FC<Record<string, never>> = () => {
     []
   );
 
-  const { data, error } = useQuery([imdbID!], async () => {
+  const { data, error, isLoading } = useQuery([imdbID!], async () => {
     const token = await getLatestAuthToken();
     const backdrop = await fetch(
       `https://54aoybt2ja.execute-api.ap-southeast-1.amazonaws.com/tmdb/find/${imdbID}`,
@@ -111,6 +112,19 @@ const Movie: React.FC<Record<string, never>> = () => {
     );
     const media_details_json = await media_details.json();
 
+    const data: MediaDetailsType = {
+      title: media_details_json["Title"],
+      year: media_details_json["Year"],
+      rated: media_details_json["Rated"],
+      runtime: media_details_json["Runtime"],
+      genre: media_details_json["Genre"],
+      director: media_details_json["Director"],
+      backdrop: backdrop_path,
+      plot: media_details_json["Plot"],
+      imdbRating: media_details_json["imdbRating"],
+      actors: media_details_json["Actors"],
+      tmdbID: tmdbId,
+    };
     if (mediaType === "series") {
       const seasons = await (
         await fetch(
@@ -123,35 +137,9 @@ const Movie: React.FC<Record<string, never>> = () => {
         )
       ).json();
       const seasons_count = seasons["number_of_seasons"];
-      const data: MediaDetailsType = {
-        title: media_details_json["Title"],
-        year: media_details_json["Year"],
-        rated: media_details_json["Rated"],
-        runtime: media_details_json["Runtime"],
-        genre: media_details_json["Genre"],
-        director: media_details_json["Director"],
-        backdrop: backdrop_path,
-        plot: media_details_json["Plot"],
-        imdbRating: media_details_json["imdbRating"],
-        actors: media_details_json["Actors"],
-        seasons: seasons_count,
-        tmdbID: tmdbId,
-      };
+      data.seasons = seasons_count;
       return data;
     } else {
-      const data: MediaDetailsType = {
-        title: media_details_json["Title"],
-        year: media_details_json["Year"],
-        rated: media_details_json["Rated"],
-        runtime: media_details_json["Runtime"],
-        genre: media_details_json["Genre"],
-        director: media_details_json["Director"],
-        backdrop: backdrop_path,
-        plot: media_details_json["Plot"],
-        imdbRating: media_details_json["imdbRating"],
-        actors: media_details_json["Actors"],
-        tmdbID: tmdbId,
-      };
       return data;
     }
   });
@@ -162,7 +150,7 @@ const Movie: React.FC<Record<string, never>> = () => {
     genre: data?.genre ?? "",
     runtime: data?.runtime ?? "",
     plot: data?.plot ?? "",
-    poster: `https://image.tmdb.org/t/p/original${data?.backdrop}`,
+    poster: `https://image.tmdb.org/t/p/w500${data?.backdrop}`,
     imdbId: imdbID ?? "",
     media: mediaType,
   };
@@ -187,6 +175,10 @@ const Movie: React.FC<Record<string, never>> = () => {
 
   if (error || watchListError) {
     return <Error />;
+  }
+
+  if (isLoading) {
+    return <FullScreenLoader />;
   }
 
   return (

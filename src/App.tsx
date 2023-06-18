@@ -8,9 +8,7 @@ import Signup from "./pages/Signup";
 import { QueryClientProvider, QueryClient } from "react-query";
 import Context from "./context/Context";
 import ErrorBoundary from "./components/ErrorBoundary";
-import Loader from "../UI/Loader";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { app } from "./firebase";
+import { FullScreenLoader } from "./common/CommonComponents";
 
 const Home = lazy(() => import("./pages/Home"));
 const Movie = lazy(() => import("./pages/Movie"));
@@ -23,15 +21,15 @@ let routes: React.ReactElement | null = null;
 const App: React.FC = () => {
   const ctx = useContext(Context);
 
-  useEffect(() => {
-    const handleContextmenu = (e: Event) => {
-      e.preventDefault();
-    };
-    document.addEventListener("contextmenu", handleContextmenu);
-    return () => {
-      document.removeEventListener("contextmenu", handleContextmenu);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handleContextmenu = (e: Event) => {
+  //     e.preventDefault();
+  //   };
+  //   document.addEventListener("contextmenu", handleContextmenu);
+  //   return () => {
+  //     document.removeEventListener("contextmenu", handleContextmenu);
+  //   };
+  // }, []);
 
   if (!ctx?.loginStateLoading) {
     if (ctx?.auth || JSON.parse(localStorage.getItem("auth") as string)) {
@@ -113,14 +111,6 @@ const App: React.FC = () => {
         <Footer />
       </BrowserRouter>
     </QueryClientProvider>
-  );
-};
-
-const FullScreenLoader = () => {
-  return (
-    <div className="h-screen">
-      <Loader text="Loading..." />
-    </div>
   );
 };
 

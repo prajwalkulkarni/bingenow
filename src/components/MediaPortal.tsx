@@ -26,7 +26,7 @@ const MediaPortal: React.FC<{
 
       <div className="z-20 w-full md:w-4/5 md:h-3/4">
         <iframe
-          src={`${process.env.REACT_APP_PLAYER_URL}/${vidSrc}`}
+          src={`${process.env.REACT_APP_PLAYER_URL}/${vidSrc}/color-5b21b6`}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
