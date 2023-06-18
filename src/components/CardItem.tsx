@@ -16,22 +16,25 @@ const CardItem: React.FC<CardItemProps> = (props) => {
 
   return (
     <Card className="flex-shrink-0 mx-2 basis-1/2 sm:basis-2/5 md:basis-1/5">
-      <div className="flex flex-col items-start justify-start overflow-hidden">
-        <Link to={`/${!movie ? "series" : "movie"}/${imdbID}`}>
-          <img
-            src={poster}
-            alt="poster"
-            className="object-cover overflow-hidden transition duration-500 transform hover:scale-150"
-            loading="lazy"
-          />
-        </Link>
-        <div className="z-10 w-full bg-white">
+      <div className="relative flex flex-wrap overflow-hidden">
+        <figure className="relative flex flex-wrap w-100">
           <Link to={`/${!movie ? "series" : "movie"}/${imdbID}`}>
-            <p className="px-3 text-xl font-bold text-black text-ellipsis">
+            <img
+              src={poster}
+              alt="poster"
+              className="object-cover overflow-hidden transition duration-500 transform w-100 hover:scale-150"
+              loading="lazy"
+              style={{ aspectRatio: "2/3" }}
+            />
+          </Link>
+        </figure>
+        <div className="absolute bottom-0 left-0 z-10 w-full bg-gradient-to-t from-black to-transparent">
+          <Link to={`/${!movie ? "series" : "movie"}/${imdbID}`}>
+            <p className="px-3 text-2xl font-bold text-white text-ellipsis">
               {title}
             </p>
           </Link>
-          <p className="px-3 font-bold text-black text-gray-500 ">{year}</p>
+          <p className="px-3 font-bold text-black text-gray-200 ">{year}</p>
         </div>
       </div>
     </Card>
