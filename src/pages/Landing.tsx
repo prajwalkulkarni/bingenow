@@ -27,7 +27,7 @@ const Landing: React.FC = () => {
         </Feature>
       </section>
       <section>
-        <Card className="my-4">
+        <Card className="mx-0 my-3">
           <div className="grid grid-cols-1 p-3 md:grid-cols-2">
             <motion.div
               initial="hidden"
@@ -84,7 +84,7 @@ const Landing: React.FC = () => {
         </Card>
       </section>
       <section>
-        <Card className="my-4">
+        <Card className="mx-0 my-3">
           <div className="grid grid-cols-1 p-3 md:grid-cols-2">
             <motion.div
               initial="hidden"
@@ -145,7 +145,7 @@ const Landing: React.FC = () => {
       </section>
 
       <section>
-        <Card className="my-4">
+        <Card className="mx-0 my-3">
           <motion.div
             className="flex flex-col items-center p-4"
             initial="hidden"

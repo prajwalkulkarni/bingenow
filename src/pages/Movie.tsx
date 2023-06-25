@@ -70,6 +70,13 @@ const Movie: React.FC<Record<string, never>> = () => {
     }
   }, [season]);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const handleClose = useCallback(
     (event: React.SyntheticEvent | Event, reason?: string) => {
       if (reason === "clickaway") {
