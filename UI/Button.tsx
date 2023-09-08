@@ -1,24 +1,25 @@
-import React from 'react'
+import React from "react";
+import Button from "@mui/material/Button";
+import { ButtonProps, CircularProgress } from "@mui/material";
 
-
-type ButtonProps = {
-    children: React.ReactNode,
-    onClick?: () => void,
-    disabled?: boolean,
-    className?: string,
-    type?: 'button' | 'submit' | 'reset' | undefined
+interface ButtonWithLoadingProps extends ButtonProps {
+  loading?: boolean;
+  children: React.ReactNode;
+  spinnerColor?: "inherit" | "white";
 }
-const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
+export const ButtonCustom = (props: ButtonWithLoadingProps) => {
+  const { loading, children, spinnerColor = "white", ...rest } = props;
 
-    const {className:class_name, ...restProps} = props
+  if (loading) {
     return (
-        <button
-        {...restProps}
-        className={`flex rounded-md z-10 items-center px-4 py-2 font-bold flex justify-center p-2 text-white rounded-md bg-violet-800 hover:bg-violet-900 ${class_name??''}`}
-        >
-        {children}
-        </button>
+      <Button>
+        <CircularProgress style={{ color: spinnerColor }} size={20} />
+      </Button>
     );
-}
-
-export default Button
+  }
+  return (
+    <Button {...rest} variant={props.variant || "contained"}>
+      {children}
+    </Button>
+  );
+};

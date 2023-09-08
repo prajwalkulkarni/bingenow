@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Button from "../../UI/Button";
+import { ButtonCustom } from "../../UI/Button";
 import Search from "../components/Search";
 import Context from "../context/Context";
 import Box from "@mui/material/Box";
@@ -17,6 +17,7 @@ import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { app } from "../firebase";
 import { getAuth } from "firebase/auth";
+import Stack from "@mui/material/Stack";
 
 const drawerData = [
   { title: "Movies", icon: <MovieIcon />, link: "/" },
@@ -144,24 +145,19 @@ const Header: React.FC<Record<string, never>> = () => {
                   Series
                 </Link>
                 <Link
-                  className="px-2 transition duration-500 hover:border-b-2 hover:border-violet-800"
+                  className="px-2 mr-px transition duration-500 hover:border-b-2 hover:border-violet-800"
                   to="/mywatchlist"
                 >
                   Watchlist
                 </Link>
-                <Button
-                  className="ml-2 text-sm lg:text-md"
-                  onClick={signoutHandler}
-                >
-                  Sign out
-                </Button>
+                <ButtonCustom onClick={signoutHandler}>Sign out</ButtonCustom>
               </div>
             </>
           )}
           {!ctx?.auth && (
             <Link
               to="/login"
-              className="z-10 flex items-center justify-center p-2 px-4 py-2 text-sm font-bold text-white rounded-md bg-violet-800 hover:bg-violet-900"
+              className="z-10 flex items-center justify-center p-2 px-4 py-2 text-sm font-bold text-white bg-violet-800 hover:bg-violet-900"
             >
               Sign in
             </Link>

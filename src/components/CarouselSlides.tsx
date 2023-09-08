@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import ReactDOM from "react-dom";
-import Button from "../../UI/Button";
+import { ButtonCustom } from "../../UI/Button";
 import {
   ContentSeparator,
   SkeletalPlaceholder,
@@ -15,7 +14,7 @@ import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import AlbumIcon from "@mui/icons-material/Album";
-import { CircularProgress } from "@mui/material";
+import Stack from "@mui/material/Stack";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useAddtoWatchlist } from "../pages/hooks/useAddToWatchlist";
@@ -198,9 +197,11 @@ const CarouselSlides = (props: CarouselSlidesType) => {
 
                   <div className="flex-col justify-between md:flex md:w-fit md:flex-row md:justify-start">
                     {carouselData ? (
-                      <>
-                        <Button
-                          className="m-1"
+                      <Stack
+                        direction={{ xs: "column", sm: "row" }}
+                        spacing={{ xs: 1, sm: 2 }}
+                      >
+                        <ButtonCustom
                           onClick={() =>
                             navigate(
                               `/${movies ? "movie" : "series"}/${
@@ -211,20 +212,16 @@ const CarouselSlides = (props: CarouselSlidesType) => {
                         >
                           <PlayCircleOutlineIcon />
                           Watch
-                        </Button>
+                        </ButtonCustom>
 
-                        <Button
-                          className="m-1 disbaled:opacity-75"
-                          onClick={watchlistMutate}
+                        <ButtonCustom
+                          onClick={() => watchlistMutate?.()}
                           disabled={addToWatchlistIsLoading}
+                          loading={addToWatchlistIsLoading}
                         >
-                          {addToWatchlistIsLoading ? (
-                            <CircularProgress />
-                          ) : (
-                            "Add to watchlist"
-                          )}
-                        </Button>
-                      </>
+                          Add to watchlist
+                        </ButtonCustom>
+                      </Stack>
                     ) : (
                       <SkeletalPlaceholder height={8} />
                     )}

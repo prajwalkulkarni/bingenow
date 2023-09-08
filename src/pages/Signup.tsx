@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { emailRegEx } from "../CONSTANTS";
 import { app } from "../firebase";
@@ -11,12 +11,11 @@ import {
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
-import Button from "../../UI/Button";
+import { ButtonCustom } from "../../UI/Button";
 import SocialLogin from "../common/SocialLogin";
 import SnackbarExtended from "../../UI/SnackbarExtended";
 import ErrorPage from "../components/ErrorPage";
 import { useCreateOrGetUser } from "./hooks/useCreateOrGetUser";
-import { CircularProgress } from "@mui/material";
 import Context from "../context/Context";
 import Loader from "../../UI/Loader";
 
@@ -88,23 +87,21 @@ const Signup: React.FC<Record<string, never>> = () => {
       console.log("Error in creating user", err);
       setOpen(true);
       setSnackbarData({
-        message: "Something went wrong",
+        message: `Something went wrong ${err}`,
         severity: "error",
       });
     }
   };
   const { isLoading, error, data, mutate } = useMutation(submitHandler);
 
-  useEffect(() => {
-    if (data && !isLoading) {
-      setOpen(true);
-      setSnackbarData({
-        message:
-          "An email has been sent to your email address. Please verify your email address.",
-        severity: "success",
-      });
-    }
-  }, [data]);
+  if (data?.user && !isLoading && !snackbarData.message) {
+    setOpen(true);
+    setSnackbarData({
+      message:
+        "An email has been sent to your email address. Please verify your email address.",
+      severity: "success",
+    });
+  }
 
   if (error || dbError) {
     return <ErrorPage />;
@@ -180,17 +177,14 @@ const Signup: React.FC<Record<string, never>> = () => {
                   </p>
                 )}
               </div>
-              <Button
+              <ButtonCustom
                 type="submit"
+                spinnerColor="inherit"
                 disabled={dbLoading || isLoading}
-                className="flex justify-center p-2 text-white rounded-md bg-violet-800 hover:bg-violet-900 disabled:opacity-75"
+                loading={isLoading || dbLoading}
               >
-                {isLoading || dbLoading ? (
-                  <CircularProgress style={{ color: "white" }} size={20} />
-                ) : (
-                  "Create account"
-                )}
-              </Button>
+                Create Account
+              </ButtonCustom>
               <p className="py-1 text-sm text-gray-400">
                 Have an account already? <Link to="/login">Sign in</Link>
               </p>

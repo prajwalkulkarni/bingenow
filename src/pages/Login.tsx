@@ -10,18 +10,16 @@ import { emailRegEx } from "../CONSTANTS";
 import { app } from "../firebase";
 import { useMutation } from "react-query";
 import useAuth from "../hooks/useAuth";
-import Button from "../../UI/Button";
+import { ButtonCustom } from "../../UI/Button";
 import Feature from "../components/Feature";
 import Context from "../context/Context";
 import SocialLogin from "../common/SocialLogin";
 import SnackbarExtended from "../../UI/SnackbarExtended";
 import ErrorPage from "../components/ErrorPage";
-import { CircularProgress } from "@mui/material";
 import Loader from "../../UI/Loader";
 
 const Login: React.FC<Record<string, never>> = () => {
   const ctx = useContext(Context);
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const auth = getAuth(app);
   const {
@@ -85,7 +83,7 @@ const Login: React.FC<Record<string, never>> = () => {
     }
   };
 
-  const { isLoading, status, error, data, mutate } = useMutation(loginHandler, {
+  const { isLoading, error, data, mutate } = useMutation(loginHandler, {
     mutationKey: "login",
   });
 
@@ -144,17 +142,14 @@ const Login: React.FC<Record<string, never>> = () => {
                   </p>
                 )}
               </div>
-              <Button
+              <ButtonCustom
                 type="submit"
                 disabled={isLoading}
-                className="w-full disabled:opacity-75"
+                loading={isLoading}
+                spinnerColor="inherit"
               >
-                {isLoading ? (
-                  <CircularProgress style={{ color: "white" }} size={20} />
-                ) : (
-                  "Login"
-                )}
-              </Button>
+                Login
+              </ButtonCustom>
               <p className="py-1 text-sm text-gray-400">
                 Don't have an account? <Link to="/signup">Signup</Link>
               </p>

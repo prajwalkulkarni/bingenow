@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import ReactDOM from "react-dom";
 import { useParams } from "react-router-dom";
-import Button from "../../UI/Button";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { useQuery } from "react-query";
 import Seasons from "../components/Seasons";
 import Feature from "../components/Feature";
 import MediaPortal from "../components/MediaPortal";
+import Stack from "@mui/material/Stack";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
@@ -25,6 +25,7 @@ import { getHumanizedTimeFromMinutes } from "../utils/commonFunctions";
 import { useAddtoWatchlist } from "./hooks/useAddToWatchlist";
 import { CircularProgress } from "@mui/material";
 import { getLatestAuthToken } from "../utils/manageToken";
+import { ButtonCustom } from "../../UI/Button";
 
 type MediaDetailsType = {
   title: string;
@@ -298,28 +299,24 @@ const Movie: React.FC<Record<string, never>> = () => {
                 )}
                 <div className="flex">
                   {data ? (
-                    <>
+                    <Stack
+                      direction={{ xs: "column", sm: "row" }}
+                      spacing={{ xs: 1, sm: 2 }}
+                    >
                       {mediaType === "movie" && (
-                        <Button className="mx-1" onClick={() => setPlay(true)}>
+                        <ButtonCustom onClick={() => setPlay(true)}>
                           <PlayCircleOutlineIcon />
                           Watch
-                        </Button>
+                        </ButtonCustom>
                       )}
-                      <Button
-                        className="mx-1 disabled:opacity-75"
-                        onClick={watchlistMutate}
+                      <ButtonCustom
+                        onClick={() => watchlistMutate?.()}
                         disabled={addToWatchlistIsLoading}
+                        loading={addToWatchlistIsLoading}
                       >
-                        {addToWatchlistIsLoading ? (
-                          <CircularProgress
-                            style={{ color: "white" }}
-                            size={20}
-                          />
-                        ) : (
-                          "Add to watchlist"
-                        )}
-                      </Button>
-                    </>
+                        Add to watchlist
+                      </ButtonCustom>
+                    </Stack>
                   ) : (
                     <SkeletalPlaceholder height={8} />
                   )}
