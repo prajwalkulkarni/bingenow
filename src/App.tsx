@@ -21,15 +21,15 @@ let routes: React.ReactElement | null = null;
 const App: React.FC = () => {
   const ctx = useContext(Context);
 
-  useEffect(() => {
-    const handleContextmenu = (e: Event) => {
-      e.preventDefault();
-    };
-    document.addEventListener("contextmenu", handleContextmenu);
-    return () => {
-      document.removeEventListener("contextmenu", handleContextmenu);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handleContextmenu = (e: Event) => {
+  //     e.preventDefault();
+  //   };
+  //   document.addEventListener("contextmenu", handleContextmenu);
+  //   return () => {
+  //     document.removeEventListener("contextmenu", handleContextmenu);
+  //   };
+  // }, []);
 
   if (!ctx?.loginStateLoading) {
     if (ctx?.auth || JSON.parse(localStorage.getItem("auth") as string)) {
