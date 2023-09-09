@@ -35,9 +35,7 @@ const Header: React.FC<Record<string, never>> = () => {
     getAuth(app)
       .signOut()
       .then(() => {
-        localStorage.removeItem("auth");
-        localStorage.removeItem("username");
-        localStorage.removeItem("userId");
+        localStorage.clear();
         ctx?.setAuth(false);
         ctx?.setEmail(null);
       });
@@ -157,7 +155,7 @@ const Header: React.FC<Record<string, never>> = () => {
           {!ctx?.auth && (
             <Link
               to="/login"
-              className="z-10 flex items-center justify-center p-2 px-4 py-2 text-sm font-bold text-white bg-violet-800 hover:bg-violet-900"
+              className="z-10 flex items-center justify-center p-2 px-4 py-2 text-sm font-bold text-white rounded shadow bg-violet-800 hover:bg-violet-900"
             >
               Sign in
             </Link>

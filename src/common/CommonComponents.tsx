@@ -15,10 +15,10 @@ export const SkeletalPlaceholder = (props: { height: number }) => (
   ></div>
 );
 
-export const FullScreenLoader = () => {
+export const FullScreenLoader = ({ text }: { text?: string }) => {
   return (
     <div className="h-screen">
-      <Loader text="Loading, hang tight..." />
+      <Loader text={text || "Loading, hang tight..."} />
     </div>
   );
 };
