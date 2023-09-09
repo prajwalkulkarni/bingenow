@@ -1,17 +1,16 @@
-import useFetch from "../../hooks/useFetch"
+import useFetch from "../../hooks/useFetch";
 import { CarouselType } from "../Home";
 
 export const useAddtoWatchlist = (media_data: CarouselType) => {
-
-
-    const { isLoading, error, data, mutate } = useFetch({
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': '*'
-        },
-        body: JSON.stringify({
-            query: `
+  const { isLoading, error, data, mutate } = useFetch(
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "*",
+      },
+      body: JSON.stringify({
+        query: `
             mutation {
                 addToWatchlist(item:{
                     imdbId:"${media_data.imdbId}",
@@ -22,14 +21,17 @@ export const useAddtoWatchlist = (media_data: CarouselType) => {
                     year:"${media_data.year}",
                     genre:"${media_data.genre}",
                     media:"${media_data?.media}",
-                },userId:"${JSON.parse(localStorage.getItem('userId')!)}"){
+                },userId:"${JSON.parse(localStorage.getItem("userId")!)}"){
                     imdbId
                     title
                 }
             }
-            `
-        })
-    }, 'mutate');
+            `,
+      }),
+    },
+    "mutate",
+    []
+  );
 
-    return { isLoading, error, data, mutate }
-}
+  return { isLoading, error, data, mutate };
+};

@@ -1,16 +1,17 @@
 import useFetch from "../../hooks/useFetch";
 
 export const useGetWatchlist = () => {
-    const { isLoading, error, data} = useFetch({
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': '*'
-        },
-        body: JSON.stringify({
-            query: `
+  const { isLoading, error, data } = useFetch(
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "*",
+      },
+      body: JSON.stringify({
+        query: `
             query {
-                watchlist(id:"${JSON.parse(localStorage.getItem('userId')!)}"){
+                watchlist(id:"${JSON.parse(localStorage.getItem("userId")!)}"){
                     imdbId
                     title
                     poster
@@ -22,10 +23,12 @@ export const useGetWatchlist = () => {
 
                 }
             }
-            `            
-        })
-    }, 'query');
+            `,
+      }),
+    },
+    "query",
+    ["getWatchlist"]
+  );
 
-    return { isLoading, error, data }
-
-}
+  return { isLoading, error, data };
+};

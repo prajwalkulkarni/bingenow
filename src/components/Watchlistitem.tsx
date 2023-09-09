@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Card from "../../UI/Card";
 import { Link } from "react-router-dom";
-import { CircularProgress } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import AlbumIcon from "@mui/icons-material/Album";
 import { getHumanizedTimeFromMinutes } from "../utils/commonFunctions";
 import { useRemoveFromWatchlist } from "../pages/hooks/useRemoveFromWatchlist";
 import { ButtonCustom } from "../../UI/Button";
+import { useQueryClient } from "react-query";
 
 type WatchlistType = {
   imdbId: string;
@@ -17,20 +17,9 @@ type WatchlistType = {
   year: string;
   genre: string;
   media: string;
-  rerenderer: (imdbId: string) => void;
 };
 const Watchlistitem: React.FC<WatchlistType> = (props) => {
-  const {
-    imdbId,
-    title,
-    poster,
-    rerenderer,
-    plot,
-    runtime,
-    year,
-    genre,
-    media,
-  } = props;
+  const { imdbId, title, poster, plot, runtime, year, genre, media } = props;
 
   const {
     isLoading: watchlistRmLoading,
@@ -39,11 +28,7 @@ const Watchlistitem: React.FC<WatchlistType> = (props) => {
     mutate: watchlistMutate,
   } = useRemoveFromWatchlist(imdbId);
 
-  useEffect(() => {
-    if (watchListRmData) {
-      rerenderer(imdbId);
-    }
-  }, [watchListRmData]);
+  const queryClient = useQueryClient();
 
   if (watchListRmError) {
     return (
@@ -53,6 +38,14 @@ const Watchlistitem: React.FC<WatchlistType> = (props) => {
       </div>
     );
   }
+
+  const removeItemAndRefetch = () => {
+    watchlistMutate?.(undefined, {
+      onSuccess: () => {
+        queryClient.invalidateQueries("getWatchlist");
+      },
+    });
+  };
 
   return (
     <Card>
@@ -81,7 +74,7 @@ const Watchlistitem: React.FC<WatchlistType> = (props) => {
             </Link>
 
             <ButtonCustom
-              onClick={() => watchlistMutate?.()}
+              onClick={removeItemAndRefetch}
               color="error"
               spinnerColor="inherit"
               disabled={watchlistRmLoading}

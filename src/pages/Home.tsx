@@ -23,7 +23,7 @@ const Home: React.FC<{ movies: boolean }> = (props) => {
     if (dbData) {
       localStorage.setItem(
         "userId",
-        JSON.stringify((dbData as any).data.createOrGetUser.id)
+        JSON.stringify((dbData as any).data?.createOrGetUser.id)
       );
     } else {
       dbMutate?.();

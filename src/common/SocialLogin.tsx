@@ -1,6 +1,6 @@
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import GoogleIcon from "@mui/icons-material/Google";
 import { app } from "../firebase";
 import Context from "../context/Context";
@@ -40,19 +40,17 @@ const SocialLogin: React.FC<{ disabled?: boolean }> = (props) => {
   const ctx = useContext(Context);
   const { disabled } = props;
 
-  useEffect(() => {
-    if (data) {
-      localStorage.setItem(
-        "userId",
-        JSON.stringify(data.data.createOrGetUser.id)
-      );
-      localStorage.setItem("auth", JSON.stringify(true));
-      localStorage.setItem("email", JSON.stringify(ctx?.email));
-      ctx?.setAuth(true);
-      navigate("/", { replace: true });
-      ctx?.setSocialLoginLoading(false);
-    }
-  }, [data]);
+  if (data) {
+    localStorage.setItem(
+      "userId",
+      JSON.stringify(data.data.createOrGetUser.id)
+    );
+    localStorage.setItem("auth", JSON.stringify(true));
+    localStorage.setItem("email", JSON.stringify(ctx?.email));
+    ctx?.setAuth(true);
+    navigate("/", { replace: true });
+    ctx?.setSocialLoginLoading(false);
+  }
 
   const socialLogin = async () => {
     ctx?.setSocialLoginLoading(true);

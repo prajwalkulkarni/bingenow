@@ -115,19 +115,22 @@ export const ContextProvider: React.FC<PropsWithChildren> = (props) => {
     });
   };
 
-  const auth = getAuth(app);
-  onAuthStateChanged(auth, (user) => {
-    if (user && user?.emailVerified) {
-      localStorage.setItem("auth", JSON.stringify(true));
-      localStorage.setItem("email", JSON.stringify(user.email));
-      setAuth(true);
-      setLoginStateLoading(false);
-      setEmail(user.email);
-    } else {
-      setAuth(false);
-      setLoginStateLoading(false);
-    }
-  });
+  useEffect(() => {
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+      console.log(user);
+      if (user && user?.emailVerified) {
+        localStorage.setItem("auth", JSON.stringify(true));
+        localStorage.setItem("email", JSON.stringify(user.email));
+        setAuth(true);
+        setLoginStateLoading(false);
+        setEmail(user.email);
+      } else {
+        setAuth(false);
+        setLoginStateLoading(false);
+      }
+    });
+  }, []);
 
   return (
     <Context.Provider

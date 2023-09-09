@@ -23,7 +23,6 @@ import {
 } from "../common/CommonComponents";
 import { getHumanizedTimeFromMinutes } from "../utils/commonFunctions";
 import { useAddtoWatchlist } from "./hooks/useAddToWatchlist";
-import { CircularProgress } from "@mui/material";
 import { getLatestAuthToken } from "../utils/manageToken";
 import { ButtonCustom } from "../../UI/Button";
 
@@ -66,7 +65,7 @@ const Movie: React.FC<Record<string, never>> = () => {
   };
 
   useEffect(() => {
-    if (seasonsRef.current) {
+    if (season && seasonsRef.current) {
       seasonsRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [season]);
@@ -103,7 +102,8 @@ const Movie: React.FC<Record<string, never>> = () => {
 
     const backdrop_path =
       mediaType === "movie"
-        ? backdrop_json["movie_results"][0]["backdrop_path"]
+        ? backdrop_json["movie_results"][0]["backdrop_path"] ||
+          backdrop_json["movie_results"][0]["poster_path"]
         : backdrop_json["tv_results"][0]["backdrop_path"];
     const tmdbId =
       mediaType === "movie"
@@ -169,17 +169,15 @@ const Movie: React.FC<Record<string, never>> = () => {
     mutate: watchlistMutate,
   } = useAddtoWatchlist(media_data);
 
-  useEffect(() => {
-    if (!addToWatchlistIsLoading && watchListData) {
-      setOpen(true);
+  if (!addToWatchlistIsLoading && watchListData && !toast.message) {
+    setOpen(true);
 
-      const [message, severity] = getMessage(watchListData);
-      setToast({
-        message,
-        severity,
-      });
-    }
-  }, [addToWatchlistIsLoading, watchListData]);
+    const [message, severity] = getMessage(watchListData);
+    setToast({
+      message,
+      severity,
+    });
+  }
 
   if (error || watchListError) {
     return <Error />;

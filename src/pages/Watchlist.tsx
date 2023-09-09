@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useCallback } from "react";
 import Loader from "../../UI/Loader";
 import Watchlistitem from "../components/Watchlistitem";
 import SnackbarExtended from "../../UI/SnackbarExtended";
@@ -17,19 +17,12 @@ type WatchlistType = {
   rerenderer?: (imdbId: string) => void;
 };
 const Watchlist: React.FC = () => {
-  const [watchlist, setWatchlist] = React.useState<WatchlistType[]>([]);
   const [open, setOpen] = React.useState<boolean>(false);
   const {
     isLoading: watchlistIsLoading,
     error: watchListError,
     data: watchListData,
   } = useGetWatchlist();
-
-  useEffect(() => {
-    if (watchListData) {
-      setWatchlist(watchListData.data.watchlist ?? []);
-    }
-  }, [watchListData]);
 
   const handleClose = useCallback(
     (event: React.SyntheticEvent | Event, reason?: string) => {
@@ -41,12 +34,6 @@ const Watchlist: React.FC = () => {
     },
     []
   );
-  const rerender = (imdbId: string) => {
-    const watchlistArr = watchlist.filter(
-      (item: WatchlistType) => item.imdbId !== imdbId
-    );
-    setWatchlist(watchlistArr);
-  };
 
   if (watchlistIsLoading) {
     return <FullScreenLoader text={"Loading your watchlist..."} />;
@@ -63,7 +50,7 @@ const Watchlist: React.FC = () => {
     );
   }
 
-  if (watchlist.length === 0) {
+  if (watchListData?.data.watchlist.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center w-full h-screen">
         <img
@@ -81,7 +68,7 @@ const Watchlist: React.FC = () => {
         My Watchlist
       </p>
       {watchListData &&
-        watchlist?.map((item: WatchlistType) => {
+        watchListData?.data.watchlist?.map((item: WatchlistType) => {
           return (
             <Watchlistitem
               key={item.imdbId}
@@ -91,7 +78,6 @@ const Watchlist: React.FC = () => {
               plot={item.plot}
               runtime={item.runtime}
               year={item.year}
-              rerenderer={rerender}
               genre={item.genre}
               media={item.media}
             />
