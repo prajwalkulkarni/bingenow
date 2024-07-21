@@ -7,33 +7,48 @@ const MediaPortal: React.FC<{
   episode?: number;
   season?: number;
   onClick: React.MouseEventHandler<HTMLDivElement>;
+  src: number;
 }> = (props) => {
-  const { mediaType, imdbID, season, episode } = props;
+  const { mediaType, imdbID, season, episode, onClick, src } = props;
 
-  const vidSrc = `${
-    mediaType === "series"
-      ? "tv/" + imdbID + "/" + season + "/" + episode
-      : "movie/" + imdbID
-  }`;
+  let vidSrc = "";
+
+  if (src === 0) {
+    vidSrc = `${
+      mediaType === "series"
+        ? "tv/" + imdbID + "/" + season + "/" + episode
+        : "movie/" + imdbID
+    }`;
+  } else {
+    vidSrc = `${
+      mediaType === "series"
+        ? "tv/" + imdbID + "/" + season + "-" + episode
+        : "movie/" + imdbID
+    }`;
+  }
+
+  let mediaSrc =
+    src === 0
+      ? process.env.REACT_APP_PLAYER_URL
+      : process.env.REACT_APP_PLAYER_URL_SECONDARY;
 
   return (
     <div className="fixed top-0 left-0 z-10 flex items-center justify-center w-screen h-screen bg-black">
       <div
         className="fixed top-0 font-bold text-white right-5 hover:cursor-pointer"
-        onClick={props.onClick}
+        onClick={onClick}
       >
         <CloseIcon />
       </div>
 
       <div className="z-20 w-full md:w-4/5 md:h-3/4">
         <iframe
-          src={`${process.env.REACT_APP_PLAYER_URL}/${vidSrc}`}
-          frameBorder="0"
+          src={`${mediaSrc}/${vidSrc}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           width={"100%"}
           height={"100%"}
-          title="Embedded youtube"
+          title="Embedded Player"
           className="w-full h-full"
         />
       </div>

@@ -25,21 +25,7 @@ import { getHumanizedTimeFromMinutes } from "../utils/commonFunctions";
 import { useAddtoWatchlist } from "./hooks/useAddToWatchlist";
 import { getLatestAuthToken } from "../utils/manageToken";
 import { ButtonCustom } from "../../UI/Button";
-
-type MediaDetailsType = {
-  title: string;
-  year: string;
-  rated: string;
-  runtime: string;
-  genre: string;
-  director: string;
-  backdrop: string;
-  plot: string;
-  imdbRating: string;
-  actors: string;
-  seasons?: number;
-  tmdbID: string;
-};
+import { useGetMovieData } from "./hooks/useGetMovieData";
 
 const Movie: React.FC<Record<string, never>> = () => {
   const route = useParams();
@@ -57,99 +43,14 @@ const Movie: React.FC<Record<string, never>> = () => {
 
   const [season, setSeason] = React.useState(1);
 
+  const [src, setSrc] = useState<number>(0);
+
   const [play, setPlay] = React.useState(false);
   const { mediaType, imdbID } = route;
 
-  const changeSeason = (e: SelectChangeEvent<number>) => {
-    setSeason(Number(e.target.value));
-  };
-
-  useEffect(() => {
-    if (season && seasonsRef.current) {
-      seasonsRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [season]);
-
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, []);
-
-  const handleClose = useCallback(
-    (event: React.SyntheticEvent | Event, reason?: string) => {
-      if (reason === "clickaway") {
-        return;
-      }
-
-      setOpen(false);
-    },
-    []
-  );
-
-  const { data, error, isLoading } = useQuery([imdbID!], async () => {
-    const token = await getLatestAuthToken();
-    const backdrop = await fetch(
-      `https://54aoybt2ja.execute-api.ap-southeast-1.amazonaws.com/tmdb/find/${imdbID}`,
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    const backdrop_json = await backdrop.json();
-
-    const backdrop_path =
-      mediaType === "movie"
-        ? backdrop_json["movie_results"][0]["backdrop_path"] ||
-          backdrop_json["movie_results"][0]["poster_path"]
-        : backdrop_json["tv_results"][0]["backdrop_path"];
-    const tmdbId =
-      mediaType === "movie"
-        ? backdrop_json["movie_results"][0]["id"]
-        : backdrop_json["tv_results"][0]["id"];
-
-    const media_details = await fetch(
-      `https://54aoybt2ja.execute-api.ap-southeast-1.amazonaws.com/omdb/media/${imdbID}`,
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    const media_details_json = await media_details.json();
-
-    const data: MediaDetailsType = {
-      title: media_details_json["Title"],
-      year: media_details_json["Year"],
-      rated: media_details_json["Rated"],
-      runtime: media_details_json["Runtime"],
-      genre: media_details_json["Genre"],
-      director: media_details_json["Director"],
-      backdrop: backdrop_path,
-      plot: media_details_json["Plot"],
-      imdbRating: media_details_json["imdbRating"],
-      actors: media_details_json["Actors"],
-      tmdbID: tmdbId,
-    };
-    if (mediaType === "series") {
-      const seasons = await (
-        await fetch(
-          `https://54aoybt2ja.execute-api.ap-southeast-1.amazonaws.com/tmdb/${tmdbId}`,
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          }
-        )
-      ).json();
-      const seasons_count = seasons["number_of_seasons"];
-      data.seasons = seasons_count;
-      return data;
-    } else {
-      return data;
-    }
+  const { data, error, loading } = useGetMovieData({
+    imdbID: imdbID!,
+    mediaType,
   });
 
   const media_data = {
@@ -169,6 +70,34 @@ const Movie: React.FC<Record<string, never>> = () => {
     mutate: watchlistMutate,
   } = useAddtoWatchlist(media_data);
 
+  const changeSeason = (e: SelectChangeEvent<number>) => {
+    setSeason(Number(e.target.value));
+  };
+
+  useEffect(() => {
+    if (season && seasonsRef.current) {
+      seasonsRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [season]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  const handleClose = useCallback(
+    (_: React.SyntheticEvent | Event, reason?: string) => {
+      if (reason === "clickaway") {
+        return;
+      }
+
+      setOpen(false);
+    },
+    []
+  );
+
   if (!addToWatchlistIsLoading && watchListData && !toast.message) {
     setOpen(true);
 
@@ -183,7 +112,7 @@ const Movie: React.FC<Record<string, never>> = () => {
     return <Error />;
   }
 
-  if (isLoading) {
+  if (loading) {
     return <FullScreenLoader />;
   }
 
@@ -197,6 +126,7 @@ const Movie: React.FC<Record<string, never>> = () => {
                 mediaType="movie"
                 imdbID={imdbID!}
                 onClick={() => setPlay(false)}
+                src={src}
               />,
               document.getElementById("portal")!
             )}
@@ -302,10 +232,26 @@ const Movie: React.FC<Record<string, never>> = () => {
                       spacing={{ xs: 1, sm: 2 }}
                     >
                       {mediaType === "movie" && (
-                        <ButtonCustom onClick={() => setPlay(true)}>
-                          <PlayCircleOutlineIcon />
-                          Watch
-                        </ButtonCustom>
+                        <>
+                          <ButtonCustom
+                            onClick={() => {
+                              setPlay(true);
+                              setSrc(0);
+                            }}
+                          >
+                            <PlayCircleOutlineIcon />
+                            Watch
+                          </ButtonCustom>
+                          <ButtonCustom
+                            variant="outlined"
+                            onClick={() => {
+                              setPlay(true);
+                              setSrc(1);
+                            }}
+                          >
+                            Watch #2
+                          </ButtonCustom>
+                        </>
                       )}
                       <ButtonCustom
                         onClick={() => watchlistMutate?.()}

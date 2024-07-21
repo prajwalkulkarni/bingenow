@@ -118,7 +118,6 @@ export const ContextProvider: React.FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     const auth = getAuth(app);
     onAuthStateChanged(auth, (user) => {
-      console.log(user);
       if (user && user?.emailVerified) {
         localStorage.setItem("auth", JSON.stringify(true));
         localStorage.setItem("email", JSON.stringify(user.email));

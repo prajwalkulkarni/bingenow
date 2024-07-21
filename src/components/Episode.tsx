@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import ReactDOM from "react-dom";
 import MediaPortal from "./MediaPortal";
@@ -15,7 +15,8 @@ type Props = {
 const Episode: React.FC<Props> = (props) => {
   const { image, imdbID, season, episode, name, overview, air_date } = props;
 
-  const [play, setPlay] = React.useState(false);
+  const [play, setPlay] = useState(false);
+  const [src, setSrc] = useState<number>(0);
 
   return (
     <div className="flex flex-col p-1 m-2 bg-white md:flex-row">
@@ -26,6 +27,7 @@ const Episode: React.FC<Props> = (props) => {
             imdbID={imdbID}
             onClick={() => setPlay(false)}
             season={season}
+            src={src}
             episode={episode}
           />,
           document.getElementById("portal") as HTMLElement
@@ -39,10 +41,19 @@ const Episode: React.FC<Props> = (props) => {
         <h1 className="text-2xl font-bold">{name}</h1>
         <p className="text-md">{overview}</p>
         <p className="text-sm">Air Date: {air_date}</p>
-        <div className="flex items-end h-full ">
+        <div className="flex items-end h-full gap-x-1">
           <ButtonCustom onClick={() => setPlay(true)}>
             <PlayCircleOutlineIcon />
             Watch
+          </ButtonCustom>
+          <ButtonCustom
+            variant="outlined"
+            onClick={() => {
+              setPlay(true);
+              setSrc(1);
+            }}
+          >
+            Watch #2
           </ButtonCustom>
         </div>
       </div>

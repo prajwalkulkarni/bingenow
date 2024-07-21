@@ -1,13 +1,9 @@
 import React, { useContext, useEffect } from "react";
-import { collection, getDocs, getFirestore } from "firebase/firestore";
-import { app } from "../firebase";
-import { useQuery } from "react-query";
 import CircularProgress from "@mui/material/CircularProgress";
 import CarouselSlides from "../components/CarouselSlides";
 import { useCreateOrGetUser } from "./hooks/useCreateOrGetUser";
 import Context from "../context/Context";
-
-const db = getFirestore(app);
+import { useGetCarouselData } from "./hooks/useGetCarouselData";
 
 const CardListLazy = React.lazy(() => import("../components/CardList"));
 const Home: React.FC<{ movies: boolean }> = (props) => {
@@ -32,20 +28,9 @@ const Home: React.FC<{ movies: boolean }> = (props) => {
 
   const { movies } = props;
 
-  const {
-    data: carouselData,
-    isLoading,
-    isError,
-  } = useQuery(movies ? "carousel" : "carouselshows", async () => {
-    const querySnapshot = await getDocs(
-      collection(db, movies ? "home" : "shows")
-    );
-    const data = querySnapshot.docs.map((doc) => doc.data());
+  const { carouselData, loading, error } = useGetCarouselData({ movies });
 
-    return data;
-  });
-
-  if (isError) {
+  if (error) {
     return (
       <div className="flex flex-col items-center w-full h-full">
         <img src={require("../assets/error.png")} alt="Error" />
@@ -62,7 +47,7 @@ const Home: React.FC<{ movies: boolean }> = (props) => {
         </div>
       </section>
 
-      <MediaCardsContainer movies={movies} isLoading={isLoading} />
+      <MediaCardsContainer movies={movies} isLoading={loading} />
     </div>
   );
 };
