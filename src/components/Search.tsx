@@ -15,7 +15,7 @@ const Search = () => {
     setSearch(e.target.value);
 
   const { data, status, isLoading, isError, refetch } = useQuery(
-    debouncedValue,
+    "searchquery:" + debouncedValue,
     async () => {
       if (debouncedValue && debouncedValue.length > 3) {
         const token = await getLatestAuthToken();
@@ -41,6 +41,9 @@ const Search = () => {
       } else {
         return [];
       }
+    },
+    {
+      enabled: debouncedValue.length > 0,
     }
   );
 
@@ -49,6 +52,8 @@ const Search = () => {
     queryClient.cancelQueries("");
     queryClient.cancelQueries(debouncedValue);
   };
+
+  console.log("Search data", data);
 
   return (
     <div className="relative w-full md:w-1/2 lg:w-1/4">
