@@ -10,7 +10,7 @@ export const useGetEpisodeData = ({
   season: number;
   tmdbID: string;
 }) => {
-  const queryKey = title ? title + season : "";
+  const queryKey = tmdbID ? "title_season:" + title + season : "";
   const { data, status, error } = useQuery(queryKey, async () => {
     const token = await getLatestAuthToken();
     const episodes = await fetch(
