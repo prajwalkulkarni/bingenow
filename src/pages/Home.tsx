@@ -40,11 +40,9 @@ const Home: React.FC<{ movies: boolean }> = (props) => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col p-2">
       <section>
-        <div className="flex relative overflow-hidden flex-col justify-center items-center min-h-[30vh] sm:min-h-[50vh] md:min-h-[60vh]">
-          <CarouselSlides movies={movies} carouselData={carouselData} />
-        </div>
+        <CarouselSlides movies={movies} carouselData={carouselData} />
       </section>
 
       <MediaCardsContainer movies={movies} isLoading={loading} />
@@ -60,6 +58,7 @@ export type CarouselType = {
   runtime: string;
   year: string;
   genre: string;
+  rating: number;
   media?: string;
 };
 
@@ -120,8 +119,8 @@ const MediaCards = (props: MediaCardsType) => {
     );
   }
   return (
-    <div className="flex flex-col p-2">
-      <p className="py-3 text-3xl font-bold md:text-5xl">{title}</p>
+    <div className="flex flex-col">
+      <p className="py-3 text-xl font-bold md:text-2xl">{title}</p>
       <CardListLazy category={category} movies={movies} />
     </div>
   );

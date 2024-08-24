@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { ButtonCustom } from "../../UI/Button";
 import { useNavigate } from "react-router-dom";
 import { CarouselType } from "../pages/Home";
@@ -54,6 +60,8 @@ const CarouselSlides = (props: CarouselSlidesType) => {
     mutate: watchlistMutate,
   } = useAddtoWatchlist(media_data);
 
+  const carouselDataMemoized = useMemo(() => carouselData, [carouselData]);
+
   useEffect(() => {
     let timeout = count === 6 ? 500 : 4000;
     let timer: NodeJS.Timeout | undefined = undefined;
@@ -75,7 +83,7 @@ const CarouselSlides = (props: CarouselSlidesType) => {
       clearTimeout(timer);
       prevCount.current = count;
     };
-  }, [count]);
+  }, [count, carouselDataMemoized]);
 
   const [message, severity] = getMessage(watchListData);
 

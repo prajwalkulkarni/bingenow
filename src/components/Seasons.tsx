@@ -49,21 +49,26 @@ const Seasons = React.forwardRef<
   }
 
   return (
-    <div className="w-full h-full" ref={ref}>
-      {data?.map((episode: EpisodeType) => {
-        return (
-          <Episode
-            key={episode.episode_number}
-            image={episode.still_path}
-            episode={episode.episode_number}
-            name={episode.name}
-            overview={episode.overview}
-            air_date={episode.air_date}
-            imdbID={imdbID}
-            season={season}
-          />
-        );
-      })}
+    <div className="w-full max-w-7xl mx-auto bg-white/10 rounded-lg pt-2 pb-3">
+      <div
+        className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2"
+        ref={ref}
+      >
+        {data?.map((episode: EpisodeType) => {
+          return (
+            <Episode
+              key={episode.episode_number}
+              image={episode.still_path}
+              episode={episode.episode_number}
+              name={episode.name}
+              overview={episode.overview}
+              air_date={episode.air_date}
+              imdbID={imdbID}
+              season={season}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 });

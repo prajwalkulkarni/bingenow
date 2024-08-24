@@ -57,8 +57,9 @@ const Movie: React.FC<Record<string, never>> = () => {
     title: data?.title ?? "",
     year: data?.year ?? "",
     genre: data?.genre ?? "",
-    runtime: data?.runtime ?? "",
+    runtime: "100" ?? "",
     plot: data?.plot ?? "",
+    rating: data?.imdbRating ? +data.imdbRating : 0,
     poster: `https://image.tmdb.org/t/p/w500${data?.backdrop}`,
     imdbId: imdbID ?? "",
     media: mediaType,
@@ -151,7 +152,7 @@ const Movie: React.FC<Record<string, never>> = () => {
                   <FormControl
                     sx={{ minWidth: 120 }}
                     size="small"
-                    className="text-white border-none h-fit w-fit bg-violet-800 hover:border-none hover:text-white"
+                    className="text-white rounded-md h-fit w-fit bg-violet-800 hover:border-none hover:text-white"
                   >
                     <Select
                       labelId="demo-select-small"
@@ -161,13 +162,15 @@ const Movie: React.FC<Record<string, never>> = () => {
                       sx={{
                         color: "white",
                         boxShadow: "none",
-                        ".MuiOutlinedInput-notchedOutline": { border: 0 },
+                        ".MuiOutlinedInput-notchedOutline": {
+                          border: 0,
+                        },
                         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                           border: 0,
                         },
                       }}
                       notched={false}
-                      className="text-white bg-violet-800 hover:border-none hover:text-white"
+                      className="text-white bg-violet-800 hover:border-none rounded-md"
                       onChange={changeSeason}
                     >
                       {new Array(data?.seasons).fill(0).map((_, i) => {
@@ -186,13 +189,14 @@ const Movie: React.FC<Record<string, never>> = () => {
                 )}
                 {data ? (
                   <div className="flex flex-col md:flex-row">
-                    <p className="flex items-center font-semibold text-white text-md md:text-lg sm:px-1">
+                    {/* <p className="flex items-center font-semibold text-white text-md md:text-lg sm:px-1">
                       <AccessTimeIcon /> &nbsp;-{" "}
                       {getHumanizedTimeFromMinutes(parseInt(data.runtime))}
-                    </p>
-                    <ContentSeparator />
+                    </p> */}
+
                     <p className="flex items-center font-semibold text-white text-md md:text-lg sm:px-1">
-                      <StarOutlineIcon /> &nbsp;- IMdb {data.imdbRating}
+                      <StarOutlineIcon /> &nbsp;- IMdb{" "}
+                      {parseInt(data.imdbRating).toFixed(1)}
                     </p>
                     <ContentSeparator />
                     <p className="flex items-center font-semibold text-white text-md md:text-lg sm:px-1">
@@ -212,12 +216,12 @@ const Movie: React.FC<Record<string, never>> = () => {
               <div className="flex flex-col justify-center mt-4">
                 {data ? (
                   <>
-                    <p className="font-semibold text-white text-md md:text-lg sm:px-1">
+                    {/* <p className="font-semibold text-white text-md md:text-lg sm:px-1">
                       Director: {data.director}
                     </p>
                     <p className="font-semibold text-white text-md md:text-lg sm:px-1">
                       Actors: {data.actors}
-                    </p>
+                    </p> */}
                     <p className="font-semibold text-white text-md md:text-lg sm:px-1">
                       Genre: {data.genre}
                     </p>

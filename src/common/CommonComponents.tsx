@@ -12,6 +12,7 @@ export const ContentSeparator = () => {
 export const SkeletalPlaceholder = (props: { height: number }) => (
   <div
     className={`w-full h-${props.height} text-lg font-bold text-white bg-gray-600 animate-pulse`}
+    style={{ height: `${props.height}px` }}
   ></div>
 );
 
