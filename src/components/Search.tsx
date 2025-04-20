@@ -64,7 +64,10 @@ const Search = () => {
       />
 
       {isError && <p>Error</p>}
-      <div className="absolute z-100 w-full bg-white rounded-b-md">
+      <div
+        className="absolute z-100 w-full bg-white rounded-b-md"
+        style={{ zIndex: 100 }}
+      >
         {isLoading && !!search && (
           <div className="flex justify-center py-2 text-violet-800">
             <CircularProgress color="primary" />
