@@ -53,8 +53,6 @@ const Search = () => {
     queryClient.cancelQueries(debouncedValue);
   };
 
-  console.log("Search data", data);
-
   return (
     <div className="relative w-full md:w-1/2 lg:w-1/4">
       <input
@@ -66,7 +64,7 @@ const Search = () => {
       />
 
       {isError && <p>Error</p>}
-      <div className="absolute z-10 w-full bg-white rounded-b-md">
+      <div className="absolute z-100 w-full bg-white rounded-b-md">
         {isLoading && !!search && (
           <div className="flex justify-center py-2 text-violet-800">
             <CircularProgress color="primary" />
