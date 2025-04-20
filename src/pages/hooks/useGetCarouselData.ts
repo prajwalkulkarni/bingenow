@@ -1,5 +1,4 @@
-import { useQuery } from "react-query";
-import { getLatestAuthToken } from "../../utils/manageToken";
+import useFetch from "../../hooks/useFetch";
 
 export interface CarouselMovies {
   imdbId?: string;
@@ -36,29 +35,72 @@ interface CarouselResponse {
 }
 
 export const useGetCarouselData = ({ movies }: { movies: boolean }) => {
-  const {
-    data: carouselData,
-    isLoading,
-    isError,
-  } = useQuery(movies ? "carousel" : "carouselshows", async () => {
-    const TARGET_ENDPOINT = movies
-      ? `https://54aoybt2ja.execute-api.ap-southeast-1.amazonaws.com/tmdb/latestpopularmovies`
-      : `https://54aoybt2ja.execute-api.ap-southeast-1.amazonaws.com/tmdb/trendingtvshows`;
+  const key = movies ? "carousel" : "carouselshows";
 
-    const token = await getLatestAuthToken();
-    const latestdata = await fetch(TARGET_ENDPOINT, {
+  const query = getQuery(movies);
+  const { isLoading, error, data } = useFetch(
+    {
+      method: "POST",
       headers: {
-        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+        Accept: "*",
       },
-    });
-    const jsonData: CarouselResponse = await latestdata.json();
-
-    return jsonData.results.slice(0, 5);
-  });
+      body: JSON.stringify({
+        query,
+      }),
+    },
+    "query",
+    [key]
+  );
 
   return {
-    carouselData,
+    carouselData: data?.data,
     loading: isLoading,
-    error: isError,
+    error: error,
   };
+};
+
+const getQuery = (movies: boolean) => {
+  return movies
+    ? `query {
+        latestpopularmovies{
+            page
+            results{     
+              backdrop_path
+              genre_ids
+              id
+              original_language
+              original_title
+              overview
+              popularity
+              poster_path
+              release_date
+              title
+              vote_average
+              vote_count
+            }
+
+        }
+    }`
+    : `query {
+        trendingtvshows{
+            page
+            results{     
+              backdrop_path
+              genre_ids
+              id
+              original_language
+              original_name
+              overview
+              popularity
+              poster_path
+              first_air_date
+              name
+              vote_average
+              vote_count
+
+            }
+
+        }
+    }`;
 };

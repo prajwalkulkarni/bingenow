@@ -57,7 +57,7 @@ const Movie: React.FC<Record<string, never>> = () => {
     title: data?.title ?? "",
     year: data?.year ?? "",
     genre: data?.genre ?? "",
-    runtime: "100" ?? "",
+    runtime: "100",
     plot: data?.plot ?? "",
     rating: data?.imdbRating ? +data.imdbRating : 0,
     poster: `https://image.tmdb.org/t/p/w500${data?.backdrop}`,

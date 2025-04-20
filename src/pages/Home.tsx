@@ -30,6 +30,9 @@ const Home: React.FC<{ movies: boolean }> = (props) => {
 
   const { carouselData, loading, error } = useGetCarouselData({ movies });
 
+  const carouselDataMovies = movies
+    ? carouselData?.latestpopularmovies?.results.slice(0, 5)
+    : carouselData?.trendingtvshows?.results.slice(0, 5);
   if (error) {
     return (
       <div className="flex flex-col items-center w-full h-full">
@@ -42,7 +45,7 @@ const Home: React.FC<{ movies: boolean }> = (props) => {
   return (
     <div className="flex flex-col p-2">
       <section>
-        <CarouselSlides movies={movies} carouselData={carouselData} />
+        <CarouselSlides movies={movies} carouselData={carouselDataMovies} />
       </section>
 
       <MediaCardsContainer movies={movies} isLoading={loading} />
