@@ -1,4 +1,9 @@
-import React, { PropsWithChildren, useEffect, useReducer } from "react";
+import React, {
+  PropsWithChildren,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { app } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -13,6 +18,19 @@ type ContextType = {
   setLoginStateLoading: (loginStateLoading: boolean) => void;
 };
 
+type SeasonsContext = {
+  seasonsCount: number;
+  setSeasonsCount: (count: number) => void;
+};
+type SeasonActionType = {
+  type: SeasonAction;
+  payload: {
+    seasonsCount: number;
+  };
+};
+enum SeasonAction {
+  SET_SEASONS_COUNT = "SET_SEASONS_COUNT",
+}
 enum Actions {
   SET_AUTH = "SET_AUTH",
   SET_EMAIL = "SET_EMAIL",
@@ -26,6 +44,7 @@ type ActionType = {
     email: string | null;
     socialLoginLoading: boolean;
     loginStateLoading: boolean;
+    seasonsCount: number;
   };
 };
 
@@ -34,8 +53,19 @@ const initialState = {
   email: null,
   socialLoginLoading: false,
   loginStateLoading: true,
+  seasonsCount: 0,
+  setEmail: () => {},
+  setAuth: () => {},
+  setSocialLoginLoading: () => {},
+  setLoginStateLoading: () => {},
+  setSeasonsCount: () => {},
 };
-const Context = React.createContext<ContextType | null>(null);
+const Context = React.createContext<ContextType>(initialState);
+
+export const SeasonsContext = React.createContext<SeasonsContext>({
+  seasonsCount: 0,
+  setSeasonsCount: () => {},
+});
 
 function reducer(
   state: {
@@ -43,6 +73,7 @@ function reducer(
     email: string | null;
     socialLoginLoading: boolean;
     loginStateLoading: boolean;
+    seasonsCount: number;
   },
   action: ActionType
 ) {
@@ -70,6 +101,7 @@ export default Context;
 export const ContextProvider: React.FC<PropsWithChildren> = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const [seasonsCount, setSeasonsCount] = useState(0);
   const setEmail = (email: string | null) => {
     dispatch({
       type: Actions.SET_EMAIL,
@@ -78,6 +110,7 @@ export const ContextProvider: React.FC<PropsWithChildren> = (props) => {
         auth: state.auth,
         socialLoginLoading: false,
         loginStateLoading: false,
+        seasonsCount: 0,
       },
     });
   };
@@ -89,6 +122,7 @@ export const ContextProvider: React.FC<PropsWithChildren> = (props) => {
         email: null,
         socialLoginLoading: false,
         loginStateLoading: false,
+        seasonsCount: 0,
       },
     });
   };
@@ -100,6 +134,7 @@ export const ContextProvider: React.FC<PropsWithChildren> = (props) => {
         auth: state.auth,
         email: null,
         loginStateLoading: false,
+        seasonsCount: 0,
       },
     });
   };
@@ -111,6 +146,7 @@ export const ContextProvider: React.FC<PropsWithChildren> = (props) => {
         auth: state.auth,
         email: null,
         socialLoginLoading: false,
+        seasonsCount: 0,
       },
     });
   };
@@ -144,7 +180,9 @@ export const ContextProvider: React.FC<PropsWithChildren> = (props) => {
         setLoginStateLoading,
       }}
     >
-      {props.children}
+      <SeasonsContext.Provider value={{ seasonsCount, setSeasonsCount }}>
+        {props.children}
+      </SeasonsContext.Provider>
     </Context.Provider>
   );
 };
