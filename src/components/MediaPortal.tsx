@@ -13,24 +13,13 @@ const MediaPortal: React.FC<{
 
   let vidSrc = "";
 
-  if (src === 0) {
-    vidSrc = `${
-      mediaType === "series"
-        ? "tv/" + imdbID + "/" + season + "/" + episode
-        : "movie/" + imdbID
-    }`;
-  } else {
-    vidSrc = `${
-      mediaType === "series"
-        ? "tv/" + imdbID + "/" + season + "-" + episode
-        : "movie/" + imdbID
-    }`;
-  }
+  vidSrc = `${
+    mediaType === "series"
+      ? "tv?imdb=" + imdbID + "&season=" + season + "&episode=" + episode
+      : "movie?imdb=" + imdbID
+  }`;
 
-  let mediaSrc =
-    src === 0
-      ? process.env.REACT_APP_PLAYER_URL
-      : process.env.REACT_APP_PLAYER_URL_SECONDARY;
+  let mediaSrc = process.env.REACT_APP_PLAYER_URL;
 
   return (
     <div className="fixed top-0 left-0 z-10 flex items-center justify-center w-screen h-screen bg-black">
