@@ -62,7 +62,8 @@ export const useGetMovieData = ({
                }
            }
         }`
-      : `getmediadata(media_type: "${MEDIA}", imdbId: "${imdbID}"){
+      : `query{
+           getmediadata(media_type: "${MEDIA}", imdbId: "${imdbID}"){
                backdrop_path
                title
                genres{
@@ -71,7 +72,9 @@ export const useGetMovieData = ({
                }
                 release_date
                 vote_average
-           }`
+           }
+      
+      }`
     : `query {
            findMovieOrTV(imdbId:"${imdbID}"){
              movie_results{
@@ -113,7 +116,7 @@ export const useGetMovieData = ({
       }),
     },
     "query",
-    [QUERY_KEY]
+    [QUERY_KEY],
   );
 
   let backdrop_path, media_details_json;
@@ -167,7 +170,7 @@ export const useGetMovieData = ({
           genre: movie["genre_ids"]
             .map(
               (id: number) =>
-                GENRE.movie.find((genre_id) => genre_id.id === id)?.genre
+                GENRE.movie.find((genre_id) => genre_id.id === id)?.genre,
             )
             .join(", "),
         };
@@ -183,7 +186,7 @@ export const useGetMovieData = ({
           genre: tv["genre_ids"]
             .map(
               (id: number) =>
-                GENRE.tv.find((genre_id) => genre_id.id === id)?.genre
+                GENRE.tv.find((genre_id) => genre_id.id === id)?.genre,
             )
             .join(", "),
           ...(MEDIA === "tv" && {

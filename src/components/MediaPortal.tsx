@@ -15,8 +15,8 @@ const MediaPortal: React.FC<{
 
   vidSrc = `${
     mediaType === "series"
-      ? "tv?imdb=" + imdbID + "&season=" + season + "&episode=" + episode
-      : "movie?imdb=" + imdbID
+      ? "embedtv/" + imdbID + "&s=" + season + "&e=" + episode
+      : "embed/" + imdbID
   }`;
 
   let mediaSrc = process.env.REACT_APP_PLAYER_URL;
